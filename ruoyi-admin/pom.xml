@@ -78,7 +78,7 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
-        
+
     </dependencies>
 
     <build>
@@ -110,5 +110,5 @@
         </plugins>
         <finalName>${project.artifactId}</finalName>
     </build>
-	
+
 </project>
