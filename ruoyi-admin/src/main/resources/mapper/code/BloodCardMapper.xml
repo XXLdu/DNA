@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.code.mapper.BloodCardMapper">
+    
+    <resultMap type="BloodCard" id="BloodCardResult">
+        <result property="id"    column="ID"    />
+        <result property="userType"    column="USER_TYPE"    />
+        <result property="name"    column="NAME"    />
+        <result property="alias"    column="ALIAS"    />
+        <result property="sex"    column="SEX"    />
+        <result property="birthday"    column="BIRTHDAY"    />
+        <result property="nationality"    column="NATIONALITY"    />
+        <result property="nation"    column="NATION"    />
+        <result property="cardType"    column="CARD_TYPE"    />
+        <result property="job"    column="JOB"    />
+        <result property="cardCode"    column="CARD_CODE"    />
+        <result property="hujidi"    column="HUJIDI"    />
+        <result property="address"    column="ADDRESS"    />
+        <result property="caseType"    column="CASE_TYPE"    />
+        <result property="caseLevel"    column="CASE_LEVEL"    />
+        <result property="fillAgency"    column="FILL_AGENCY"    />
+        <result property="fillUser"    column="FILL_USER"    />
+        <result property="fillTime"    column="FILL_TIME"    />
+        <result property="remark"    column="REMARK"    />
+    </resultMap>
+
+    <sql id="selectBloodCardVo">
+        select ID, USER_TYPE, NAME, ALIAS, SEX, BIRTHDAY, NATIONALITY, NATION, CARD_TYPE, JOB, CARD_CODE, HUJIDI, ADDRESS, CASE_TYPE, CASE_LEVEL, FILL_AGENCY, FILL_USER, FILL_TIME, REMARK from blood_card
+    </sql>
+
+    <select id="selectBloodCardList" parameterType="BloodCard" resultMap="BloodCardResult">
+        <include refid="selectBloodCardVo"/>
+        <where>  
+            <if test="userType != null  and userType != ''"> and USER_TYPE = #{userType}</if>
+            <if test="name != null  and name != ''"> and NAME like concat('%', #{name}, '%')</if>
+            <if test="sex != null  and sex != ''"> and SEX = #{sex}</if>
+            <if test="cardCode != null  and cardCode != ''"> and CARD_CODE like concat('%', #{cardCode}, '%')</if>
+            <if test="caseType != null  and caseType != ''"> and CASE_TYPE = #{caseType}</if>
+            <if test="caseLevel != null  and caseLevel != ''"> and CASE_LEVEL = #{caseLevel}</if>
+            <if test="fillAgency != null  and fillAgency != ''"> and FILL_AGENCY = #{fillAgency}</if>
+            <if test="fillUser != null  and fillUser != ''"> and FILL_USER = #{fillUser}</if>
+        </where>
+    </select>
+    
+    <select id="selectBloodCardById" parameterType="Long" resultMap="BloodCardResult">
+        <include refid="selectBloodCardVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertBloodCard" parameterType="BloodCard">
+        insert into blood_card
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">ID,</if>
+            <if test="userType != null  and userType != ''">USER_TYPE,</if>
+            <if test="name != null  and name != ''">NAME,</if>
+            <if test="alias != null  and alias != ''">ALIAS,</if>
+            <if test="sex != null  and sex != ''">SEX,</if>
+            <if test="birthday != null ">BIRTHDAY,</if>
+            <if test="nationality != null  and nationality != ''">NATIONALITY,</if>
+            <if test="nation != null  and nation != ''">NATION,</if>
+            <if test="cardType != null  and cardType != ''">CARD_TYPE,</if>
+            <if test="job != null  and job != ''">JOB,</if>
+            <if test="cardCode != null  and cardCode != ''">CARD_CODE,</if>
+            <if test="hujidi != null  and hujidi != ''">HUJIDI,</if>
+            <if test="address != null  and address != ''">ADDRESS,</if>
+            <if test="caseType != null  and caseType != ''">CASE_TYPE,</if>
+            <if test="caseLevel != null  and caseLevel != ''">CASE_LEVEL,</if>
+            <if test="fillAgency != null  and fillAgency != ''">FILL_AGENCY,</if>
+            <if test="fillUser != null  and fillUser != ''">FILL_USER,</if>
+            <if test="fillTime != null ">FILL_TIME,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="userType != null  and userType != ''">#{userType},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="alias != null  and alias != ''">#{alias},</if>
+            <if test="sex != null  and sex != ''">#{sex},</if>
+            <if test="birthday != null ">#{birthday},</if>
+            <if test="nationality != null  and nationality != ''">#{nationality},</if>
+            <if test="nation != null  and nation != ''">#{nation},</if>
+            <if test="cardType != null  and cardType != ''">#{cardType},</if>
+            <if test="job != null  and job != ''">#{job},</if>
+            <if test="cardCode != null  and cardCode != ''">#{cardCode},</if>
+            <if test="hujidi != null  and hujidi != ''">#{hujidi},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="caseType != null  and caseType != ''">#{caseType},</if>
+            <if test="caseLevel != null  and caseLevel != ''">#{caseLevel},</if>
+            <if test="fillAgency != null  and fillAgency != ''">#{fillAgency},</if>
+            <if test="fillUser != null  and fillUser != ''">#{fillUser},</if>
+            <if test="fillTime != null ">#{fillTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBloodCard" parameterType="BloodCard">
+        update blood_card
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userType != null  and userType != ''">USER_TYPE = #{userType},</if>
+            <if test="name != null  and name != ''">NAME = #{name},</if>
+            <if test="alias != null  and alias != ''">ALIAS = #{alias},</if>
+            <if test="sex != null  and sex != ''">SEX = #{sex},</if>
+            <if test="birthday != null ">BIRTHDAY = #{birthday},</if>
+            <if test="nationality != null  and nationality != ''">NATIONALITY = #{nationality},</if>
+            <if test="nation != null  and nation != ''">NATION = #{nation},</if>
+            <if test="cardType != null  and cardType != ''">CARD_TYPE = #{cardType},</if>
+            <if test="job != null  and job != ''">JOB = #{job},</if>
+            <if test="cardCode != null  and cardCode != ''">CARD_CODE = #{cardCode},</if>
+            <if test="hujidi != null  and hujidi != ''">HUJIDI = #{hujidi},</if>
+            <if test="address != null  and address != ''">ADDRESS = #{address},</if>
+            <if test="caseType != null  and caseType != ''">CASE_TYPE = #{caseType},</if>
+            <if test="caseLevel != null  and caseLevel != ''">CASE_LEVEL = #{caseLevel},</if>
+            <if test="fillAgency != null  and fillAgency != ''">FILL_AGENCY = #{fillAgency},</if>
+            <if test="fillUser != null  and fillUser != ''">FILL_USER = #{fillUser},</if>
+            <if test="fillTime != null ">FILL_TIME = #{fillTime},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteBloodCardById" parameterType="Long">
+        delete from blood_card where ID = #{id}
+    </delete>
+
+    <delete id="deleteBloodCardByIds" parameterType="String">
+        delete from blood_card where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

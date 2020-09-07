@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.code.mapper.TestrecordDetailMapper">
+    
+    <resultMap type="TestrecordDetail" id="TestrecordDetailResult">
+        <result property="trustId"    column="TRUST_ID"    />
+        <result property="sampleId"    column="SAMPLE_ID"    />
+        <result property="sampleName"    column="SAMPLE_NAME"    />
+        <result property="purifyWay"    column="PURIFY_WAY"    />
+        <result property="purifyReagent"    column="PURIFY_REAGENT"    />
+        <result property="purifyInstrument"    column="PURIFY_INSTRUMENT"    />
+        <result property="purifyStartTime"    column="PURIFY_START_TIME"    />
+        <result property="purifyEndTime"    column="PURIFY_END_TIME"    />
+        <result property="amplificationWay"    column="AMPLIFICATION_WAY"    />
+        <result property="amplificationReagent"    column="AMPLIFICATION_REAGENT"    />
+        <result property="amplificationInstrument"    column="AMPLIFICATION_INSTRUMENT"    />
+        <result property="amplificationStartTime"    column="AMPLIFICATION_START_TIME"    />
+        <result property="amplificationEndTime"    column="AMPLIFICATION_END_TIME"    />
+        <result property="orderNum"    column="ORDER_NUM"    />
+    </resultMap>
+
+    <sql id="selectTestrecordDetailVo">
+        select TRUST_ID, SAMPLE_ID, SAMPLE_NAME, PURIFY_WAY, PURIFY_REAGENT, PURIFY_INSTRUMENT, PURIFY_START_TIME, PURIFY_END_TIME, AMPLIFICATION_WAY, AMPLIFICATION_REAGENT, AMPLIFICATION_INSTRUMENT, AMPLIFICATION_START_TIME, AMPLIFICATION_END_TIME, ORDER_NUM from testrecord_detail
+    </sql>
+
+    <select id="selectTestrecordDetailList" parameterType="TestrecordDetail" resultMap="TestrecordDetailResult">
+        <include refid="selectTestrecordDetailVo"/>
+        where TRUST_ID = #{trustId}
+        order by ORDER_NUM
+    </select>
+    
+    <select id="selectTestrecordDetailBySampleId" parameterType="String" resultMap="TestrecordDetailResult">
+        <include refid="selectTestrecordDetailVo"/>
+        where SAMPLE_ID = #{sampleId}
+    </select>
+        
+    <insert id="insertTestrecordDetail" parameterType="TestrecordDetail">
+        insert into testrecord_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="trustId != null  and trustId != ''">TRUST_ID,</if>
+            <if test="sampleId != null  and sampleId != ''">SAMPLE_ID,</if>
+            <if test="sampleName != null  and sampleName != ''">SAMPLE_NAME,</if>
+            <if test="purifyWay != null  and purifyWay != ''">PURIFY_WAY,</if>
+            <if test="purifyReagent != null  and purifyReagent != ''">PURIFY_REAGENT,</if>
+            <if test="purifyInstrument != null  and purifyInstrument != ''">PURIFY_INSTRUMENT,</if>
+            <if test="purifyStartTime != null ">PURIFY_START_TIME,</if>
+            <if test="purifyEndTime != null ">PURIFY_END_TIME,</if>
+            <if test="amplificationWay != null  and amplificationWay != ''">AMPLIFICATION_WAY,</if>
+            <if test="amplificationReagent != null  and amplificationReagent != ''">AMPLIFICATION_REAGENT,</if>
+            <if test="amplificationInstrument != null  and amplificationInstrument != ''">AMPLIFICATION_INSTRUMENT,</if>
+            <if test="amplificationStartTime != null ">AMPLIFICATION_START_TIME,</if>
+            <if test="amplificationEndTime != null ">AMPLIFICATION_END_TIME,</if>
+            <if test="orderNum != null ">ORDER_NUM,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="trustId != null  and trustId != ''">#{trustId},</if>
+            <if test="sampleId != null  and sampleId != ''">#{sampleId},</if>
+            <if test="purifyWay != null  and purifyWay != ''">#{purifyWay},</if>
+            <if test="purifyReagent != null  and purifyReagent != ''">#{purifyReagent},</if>
+            <if test="purifyInstrument != null  and purifyInstrument != ''">#{purifyInstrument},</if>
+            <if test="purifyStartTime != null ">#{purifyStartTime},</if>
+            <if test="purifyEndTime != null ">#{purifyEndTime},</if>
+            <if test="amplificationWay != null  and amplificationWay != ''">#{amplificationWay},</if>
+            <if test="amplificationReagent != null  and amplificationReagent != ''">#{amplificationReagent},</if>
+            <if test="amplificationInstrument != null  and amplificationInstrument != ''">#{amplificationInstrument},</if>
+            <if test="amplificationStartTime != null ">#{amplificationStartTime},</if>
+            <if test="amplificationEndTime != null ">#{amplificationEndTime},</if>
+            <if test="orderNum != null ">#{orderNum},</if>
+         </trim>
+    </insert>
+
+    <delete id="deleteTestrecordDetailByTrustId" parameterType="String">
+        delete from testrecord_detail where TRUST_ID = #{trustId}
+    </delete>
+
+</mapper>

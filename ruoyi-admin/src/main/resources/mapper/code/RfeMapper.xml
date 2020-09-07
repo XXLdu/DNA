@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.code.mapper.RfeMapper">
+
+    <resultMap type="Rfe" id="RfeResult">
+        <result property="id"    column="ID"    />
+        <result property="code"    column="CODE"    />
+        <result property="trustId"    column="TRUST_ID"    />
+        <result property="startTime"    column="START_TIME"    />
+        <result property="endTime"    column="END_TIME"    />
+        <result property="explain"    column="EXPLAIN1"    />
+    </resultMap>
+
+    <sql id="selectRfeVo">
+        select ID, CODE, TRUST_ID, START_TIME, END_TIME, EXPLAIN1 from rfe
+    </sql>
+
+    <select id="selectRfeList" parameterType="Rfe" resultMap="RfeResult">
+        <include refid="selectRfeVo"/>
+        <where>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+            <if test="trustId != null  and trustId != ''"> and TRUST_ID = #{trustId}</if>
+            <if test="startTime != null "> and START_TIME = #{startTime}</if>
+            <if test="endTime != null "> and END_TIME = #{endTime}</if>
+            <if test="explain != null  and explain != ''"> and EXPLAIN1 = #{explain}</if>
+        </where>
+    </select>
+
+    <select id="selectRfeById" parameterType="String" resultMap="RfeResult">
+        <include refid="selectRfeVo"/>
+        where ID = #{id}
+    </select>
+
+    <insert id="insertRfe" parameterType="Rfe">
+        insert into rfe
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">ID,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="trustId != null  and trustId != ''">TRUST_ID,</if>
+            <if test="startTime != null ">START_TIME,</if>
+            <if test="endTime != null ">END_TIME,</if>
+            <if test="explain != null  and explain != ''">EXPLAIN1,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="trustId != null  and trustId != ''">#{trustId},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+            <if test="explain != null  and explain != ''">#{explain},</if>
+        </trim>
+    </insert>
+
+    <update id="updateRfe" parameterType="Rfe">
+        update rfe
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="trustId != null  and trustId != ''">TRUST_ID = #{trustId},</if>
+            <if test="startTime != null ">START_TIME = #{startTime},</if>
+            <if test="endTime != null ">END_TIME = #{endTime},</if>
+            <if test="explain != null  and explain != ''">EXPLAIN1 = #{explain},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteRfeById" parameterType="String">
+        delete from rfe where ID = #{id}
+    </delete>
+
+    <delete id="deleteRfeByIds" parameterType="String">
+        delete from rfe where ID in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

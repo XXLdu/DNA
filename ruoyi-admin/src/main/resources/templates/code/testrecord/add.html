@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增检验记录')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-testrecord-add">
+            <input name="id" th:value="${id}" type="hidden">
+            <input name="trustId" th:value="${trustId}" type="hidden" >
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">检验地点：</label>
+                        <div class="col-sm-8">
+                            <input name="testPlace" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">检验室：</label>
+                        <div class="col-sm-8">
+                            <input name="testHome" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label is-required">检验人一：</label>
+                        <div class="col-sm-8">
+                            <select name="tester1" class="form-control m-b" th:with="type=${fyUserList}">
+                                <option>--请选择--</option>
+                                <option th:each="user : ${type}" th:text="${user.userName}" th:value="${user.userName}" th:selected="${user.userName} eq *{tester1}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label is-required">检验人二：</label>
+                        <div class="col-sm-8">
+                            <select name="tester2" class="form-control m-b" th:with="type=${fyUserList}">
+                                <option>--请选择--</option>
+                                <option th:each="user : ${type}" th:text="${user.userName}" th:value="${user.userName}" th:selected="${user.userName} eq *{tester2}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">检验复核人：</label>
+                        <div class="col-sm-8">
+                            <select name="reviewer" class="form-control m-b" th:with="type=${reviewerUserList}">
+                                <option>--请选择--</option>
+                                <option th:each="user : ${type}" th:text="${user.userName}" th:value="${user.userName}" th:selected="${user.userName} eq *{reviewer}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">温度：</label>
+                        <div class="col-sm-8">
+                            <input name="temperarure" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">湿度：</label>
+                        <div class="col-sm-8">
+                            <input name="humidity" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-2 control-label">检验过程：</label>
+                <div class="col-sm-10">
+                    <iframe th:src="@{/code/testrecordDetail/{trustId}(trustId=${trustId})}" width="100%" height="450px" frameborder="0" name="检验详情" scrolling="auto">
+                    </iframe>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "code/testrecord"
+        $("#form-testrecord-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-testrecord-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

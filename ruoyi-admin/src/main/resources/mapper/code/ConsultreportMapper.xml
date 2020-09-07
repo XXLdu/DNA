@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.code.mapper.ConsultreportMapper">
+    
+    <resultMap type="Consultreport" id="ConsultreportResult">
+        <result property="id"    column="ID"    />
+        <result property="code"    column="CODE"    />
+        <result property="trustId"    column="TRUST_ID"    />
+        <result property="time"    column="TIME"    />
+        <result property="name"    column="NAME"    />
+    </resultMap>
+
+    <sql id="selectConsultreportVo">
+        select ID, CODE, TRUST_ID, TIME, NAME from consultreport
+    </sql>
+
+    <select id="selectConsultreportList" parameterType="Consultreport" resultMap="ConsultreportResult">
+        <include refid="selectConsultreportVo"/>
+        <where>  
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+            <if test="trustId != null  and trustId != ''"> and TRUST_ID = #{trustId}</if>
+            <if test="time != null "> and TIME = #{time}</if>
+            <if test="name != null  and name != ''"> and NAME like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectConsultreportById" parameterType="String" resultMap="ConsultreportResult">
+        <include refid="selectConsultreportVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertConsultreport" parameterType="Consultreport">
+        insert into consultreport
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">ID,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="trustId != null  and trustId != ''">TRUST_ID,</if>
+            <if test="time != null ">TIME,</if>
+            <if test="name != null  and name != ''">NAME,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="trustId != null  and trustId != ''">#{trustId},</if>
+            <if test="time != null ">#{time},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+         </trim>
+    </insert>
+
+    <update id="updateConsultreport" parameterType="Consultreport">
+        update consultreport
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="trustId != null  and trustId != ''">TRUST_ID = #{trustId},</if>
+            <if test="time != null ">TIME = #{time},</if>
+            <if test="name != null  and name != ''">NAME = #{name},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteConsultreportById" parameterType="String">
+        delete from consultreport where ID = #{id}
+    </delete>
+
+    <delete id="deleteConsultreportByIds" parameterType="String">
+        delete from consultreport where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

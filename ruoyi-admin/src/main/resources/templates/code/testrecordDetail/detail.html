@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('鉴定详情列表')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: bootstrap-select-css" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-primary single" onclick="add()" shiro:hasPermission="code:trust:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single" onclick="doSave()" shiro:hasPermission="code:trust:save">
+                    <i class="fa fa-save"></i> 保存
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <form>
+                    <table id="bootstrap-table">
+                        <thead>
+                        <tr>
+                            <th>操作</th>
+                            <th>检材名称</th>
+                            <th>提纯</th>
+                            <th>扩增</th>
+                            <th>测序结果</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr id="tr_1">
+                            <td>
+                                <a name="remove"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <select name="sample" class="form-control m-b" th:with="type=${sampleList}">
+                                            <option>请选择检材</option>
+                                            <option th:each="sample:${type}" th:text="${sample.name}" th:value="${sample.id}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <select name="purifyWay" class="form-control noselect2 selectpicker" data-none-selected-text="请选择提纯方法" multiple>
+                                            <option th:each="dict : ${@dict.getType('purify_way')}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <select name="purifyReagent" class="form-control noselect2 selectpicker" data-none-selected-text="请选择提纯试剂" multiple>
+                                            <option th:each="dict : ${@dict.getType('purify_reagent')}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <select name="purifyInstrument" class="form-control noselect2 selectpicker" data-none-selected-text="请选择提纯仪器" multiple>
+                                            <option th:each="dict : ${@dict.getType('purify_instrument')}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input type="text" class="custom-time form-control" name="purifyStartTime" placeholder="开始时间"/>
+                                        <input type="text" class="custom-time form-control" name="purifyEndTime" placeholder="结束时间"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <select name="amplificationWay" class="form-control noselect2 selectpicker" data-none-selected-text="请选择扩增方法" multiple>
+                                            <option th:each="dict : ${@dict.getType('amplification_way')}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <select name="amplificationReagent" class="form-control noselect2 selectpicker" data-none-selected-text="请选择扩增试剂" multiple>
+                                            <option th:each="dict : ${@dict.getType('amplification_reagent')}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <select name="amplificationInstrument" class="form-control noselect2 selectpicker" data-none-selected-text="请选择扩增仪器" multiple>
+                                            <option th:each="dict : ${@dict.getType('amplification_instrument')}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input type="text" class="custom-time form-control" name="amplificationStartTime" placeholder="开始时间"/>
+                                        <input type="text" class="custom-time form-control" name="amplificationEndTime" placeholder="结束时间"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <a class="btn btn-success btn-xs" href="javascript:void(0)" onclick=""><i class="fa fa-upload"></i>上传</a>
+                                <a class="btn btn-success btn-xs" href="javascript:void(0)" onclick=""><i class="fa fa-search"></i>查看</a>
+                            </td>
+                        </tr>
+                        <tr id="sign"></tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+     <th:block th:include="include :: bootstrap-select-js" />
+    <script th:inline="javascript">
+        $(function() {
+            var options = {};
+            $.table.init(options);
+            bindDatetimepicker();
+            getTestrecordDetailList();
+        });
+
+
+        var num = 1;
+        function add() {
+            $(".noselect2").removeClass("open");
+            num++;
+            var tr = $("tr[id^='tr_']").eq(0).clone();
+            var tr_id = tr.attr("id");
+            tr.attr("id",tr_id.split("_")[0]+"_"+num);
+
+            $.each(tr.find("input"),function(){
+                $(this).val("");
+            });
+            $.each(tr.find("select"),function(){
+                $(this).val("");
+            });
+            $("#sign").before(tr);
+
+            bindDatetimepicker();
+            bindSelectpicker();
+
+        }
+
+        function doSave() {
+            var trs = $("tr[id^='tr_']");
+            var list = [];
+            $.each(trs,function(){
+                var object ={
+                    trustId:[[${trust_id}]],
+                    sampleId:$(this).find("[name='sample']").val()+"",
+                    sampleName:$(this).find("[name='sample']").text()+"",
+                    purifyWay:$(this).find("[name='purifyWay']").val()+"",
+                    purifyReagent:$(this).find("[name='purifyReagent']").val()+"",
+                    purifyInstrument:$(this).find("[name='purifyInstrument']").val()+"",
+                    purifyStartTime:$(this).find("[name='purifyStartTime']").val()+"",
+                    purifyEndTime:$(this).find("[name='purifyEndTime']").val()+"",
+                    amplificationWay:$(this).find("[name='amplificationWay']").val()+"",
+                    amplificationReagent:$(this).find("[name='amplificationReagent']").val()+"",
+                    amplificationInstrument:$(this).find("[name='amplificationInstrument']").val()+"",
+                    amplificationStartTime:$(this).find("[name='amplificationStartTime']").val()+"",
+                    amplificationEndTime:$(this).find("[name='amplificationEndTime']").val()+"",
+                    orderNum:$(this).attr("id").split("_")[1]+""
+                }
+                list.push(object);
+            });
+            $.ajax({
+                type: "post",
+                url: ctx + "code/testrecordDetail/doSave",
+                data: {
+                    "json": JSON.stringify(list)
+                },
+                success: function(r) {
+                    if(r>0){
+                        $.modal.msgSuccess("保存成功")
+                    }else{
+                        $.modal.msgError("发生错误，保存失败");
+                    }
+                }
+            })
+        }
+
+        function bindDatetimepicker(){
+            $(".custom-time").datetimepicker({
+                format: "yyyy-mm-dd hh:ii",
+                minView: 0,
+                autoclose: true
+            });
+        }
+        function bindSelectpicker(){
+            $('.selectpicker').data('selectpicker', null);
+            $('.bootstrap-select').find("button:first").remove();
+            $('.selectpicker').selectpicker();
+        }
+        $(document).on("click","[name='remove']",function () {
+            if($("tr[id^='tr_']").length>1){
+                $(this).parents("tr[id^='tr_']").remove();
+            }else{
+                $.modal.alert("至少保留一条检测记录");
+            }
+        });
+
+        function getTestrecordDetailList() {
+            $.ajax({
+                type: "post",
+                url: ctx + "code/testrecordDetail/getTestrecordDetailList",
+                data: {
+                    "trust_id": [[${trust_id}]]
+                },
+                success: function(result) {
+                    var detailList = JSON.parse(result);
+                    var detail;
+                    var tr;
+
+                    for(var a=0;a<detailList.length;a++){
+                        if(a>0) add();
+                    }
+                    for(var a=0;a<detailList.length;a++){
+                        detail = detailList[a];
+                        tr = $("#tr_"+(a+1));
+                        tr.find("[name='sample']").val(detail.sampleId);
+                        tr.find("[name='purifyWay']").find("option").each(function () {
+                            if(detail.purifyWay.indexOf($(this).val())>-1)
+                                $(this).attr("selected",true);
+                        });
+                        tr.find("[name='purifyReagent']").find("option").each(function () {
+                            if(detail.purifyReagent.indexOf($(this).val())>-1)
+                                $(this).attr("selected",true);
+                        });
+                        tr.find("[name='purifyInstrument']").find("option").each(function () {
+                            if(detail.purifyInstrument.indexOf($(this).val())>-1)
+                                $(this).attr("selected",true);
+                        });
+                        tr.find("[name='purifyStartTime']").val(ry_format(detail.purifyStartTime));
+                        tr.find("[name='purifyEndTime']").val(ry_format(detail.purifyEndTime));
+                        tr.find("[name='amplificationWay']").find("option").each(function () {
+                            if(detail.amplificationWay.indexOf($(this).val())>-1)
+                                $(this).attr("selected",true);
+                        });
+                        tr.find("[name='amplificationReagent']").find("option").each(function () {
+                            if(detail.amplificationReagent.indexOf($(this).val())>-1)
+                                $(this).attr("selected",true);
+                        });
+                        tr.find("[name='amplificationInstrument']").find("option").each(function () {
+                            if(detail.amplificationInstrument.indexOf($(this).val())>-1)
+                                $(this).attr("selected",true);
+                        });
+                        tr.find("[name='amplificationStartTime']").val(ry_format(detail.amplificationStartTime));
+                        tr.find("[name='amplificationEndTime']").val(ry_format(detail.amplificationEndTime,));
+                    }
+                    bindSelectpicker();
+                }
+            })
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.code.mapper.PhysicalDeliverMapper">
+    
+    <resultMap type="PhysicalDeliver" id="PhysicalDeliverResult">
+        <result property="id"    column="ID"    />
+        <result property="code"    column="CODE"    />
+        <result property="physicalId"    column="PHYSICAL_ID"    />
+        <result property="physicalName"    column="PHYSICAL_NAME"    />
+        <result property="type"    column="TYPE"    />
+        <result property="fromPeopleId"    column="FROM_PEOPLE_ID"    />
+        <result property="fromPeopleName"    column="FROM_PEOPLE_NAME"    />
+        <result property="toPeopleId"    column="TO_PEOPLE_ID"    />
+        <result property="toPeopleName"    column="TO_PEOPLE_NAME"    />
+        <result property="time"    column="TIME"    />
+        <result property="place"    column="PLACE"    />
+        <result property="remark"    column="REMARK"    />
+    </resultMap>
+
+    <sql id="selectPhysicalDeliverVo">
+        select ID, CODE, PHYSICAL_ID,PHYSICAL_NAME, TYPE, FROM_PEOPLE_ID, FROM_PEOPLE_NAME, TO_PEOPLE_ID, TO_PEOPLE_NAME, TIME, PLACE, REMARK from physical_deliver
+    </sql>
+
+    <select id="selectPhysicalDeliverList" parameterType="PhysicalDeliver" resultMap="PhysicalDeliverResult">
+        <include refid="selectPhysicalDeliverVo"/>
+        <where>  
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+            <if test="physicalId != null  and physicalId != ''"> and PHYSICAL_ID = #{physicalId}</if>
+            <if test="physicalName!= null  and physicalName != ''"> and PHYSICAL_NAME = #{physicalName}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="fromPeopleId != null  and fromPeopleId != ''"> and FROM_PEOPLE_ID = #{fromPeopleId}</if>
+            <if test="fromPeopleName != null  and fromPeopleName != ''"> and FROM_PEOPLE_NAME like concat('%', #{fromPeopleName}, '%')</if>
+            <if test="toPeopleId != null  and toPeopleId != ''"> and TO_PEOPLE_ID = #{toPeopleId}</if>
+            <if test="toPeopleName != null  and toPeopleName != ''"> and TO_PEOPLE_NAME like concat('%', #{toPeopleName}, '%')</if>
+            <if test="time != null "> and TIME = #{time}</if>
+            <if test="place != null  and place != ''"> and PLACE = #{place}</if>
+            <if test="remark != null  and remark != ''"> and REMARK = #{remark}</if>
+        </where>
+        order by time
+    </select>
+    
+    <select id="selectPhysicalDeliverById" parameterType="String" resultMap="PhysicalDeliverResult">
+        <include refid="selectPhysicalDeliverVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertPhysicalDeliver" parameterType="PhysicalDeliver">
+        insert into physical_deliver
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">ID,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="physicalId != null  and physicalId != ''">PHYSICAL_ID,</if>
+            <if test="physicalName != null  and physicalName != ''">PHYSICAL_NAME,</if>
+            <if test="type != null  and type != ''">TYPE,</if>
+            <if test="fromPeopleId != null  and fromPeopleId != ''">FROM_PEOPLE_ID,</if>
+            <if test="fromPeopleName != null  and fromPeopleName != ''">FROM_PEOPLE_NAME,</if>
+            <if test="toPeopleId != null  and toPeopleId != ''">TO_PEOPLE_ID,</if>
+            <if test="toPeopleName != null  and toPeopleName != ''">TO_PEOPLE_NAME,</if>
+            <if test="time != null ">TIME,</if>
+            <if test="place != null  and place != ''">PLACE,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="physicalId != null  and physicalId != ''">#{physicalId},</if>
+            <if test="physicalName != null  and physicalName != ''">#{physicalName},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="fromPeopleId != null  and fromPeopleId != ''">#{fromPeopleId},</if>
+            <if test="fromPeopleName != null  and fromPeopleName != ''">#{fromPeopleName},</if>
+            <if test="toPeopleId != null  and toPeopleId != ''">#{toPeopleId},</if>
+            <if test="toPeopleName != null  and toPeopleName != ''">#{toPeopleName},</if>
+            <if test="time != null ">#{time},</if>
+            <if test="place != null  and place != ''">#{place},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePhysicalDeliver" parameterType="PhysicalDeliver">
+        update physical_deliver
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="physicalId != null  and physicalId != ''">PHYSICAL_ID = #{physicalId},</if>
+            <if test="type != null  and type != ''">TYPE = #{type},</if>
+            <if test="fromPeopleId != null  and fromPeopleId != ''">FROM_PEOPLE_ID = #{fromPeopleId},</if>
+            <if test="fromPeopleName != null  and fromPeopleName != ''">FROM_PEOPLE_NAME = #{fromPeopleName},</if>
+            <if test="toPeopleId != null  and toPeopleId != ''">TO_PEOPLE_ID = #{toPeopleId},</if>
+            <if test="toPeopleName != null  and toPeopleName != ''">TO_PEOPLE_NAME = #{toPeopleName},</if>
+            <if test="time != null ">TIME = #{time},</if>
+            <if test="place != null  and place != ''">PLACE = #{place},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deletePhysicalDeliverById" parameterType="String">
+        delete from physical_deliver where ID = #{id}
+    </delete>
+
+    <delete id="deletePhysicalDeliverByIds" parameterType="String">
+        delete from physical_deliver where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

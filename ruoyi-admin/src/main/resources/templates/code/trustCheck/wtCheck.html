@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('委托单位审核列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li class="select-time">
+                                <label>委托时间：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[startTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                            </li>
+                            <li>
+                                <label>委托单位：</label>
+                                <input type="text" name="departmentName"/>
+                            </li>
+                            <li>
+                                <label>鉴定专业：</label>
+                                <select name="appraisalType" th:with="type=${@dict.getType('appraisal_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>案件名称：</label>
+                                <input type="text" name="caseName"/>
+                            </li>
+                            <li>
+                                <label>案发地点：</label>
+                                <input type="text" name="casePlace"/>
+                            </li>
+                            <li class="select-time">
+                                <label>案发时间：</label>
+                                <input type="text" class="time-input" id="beginCaseTime" placeholder="开始时间" name="params[beginCaseTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endCaseTime" placeholder="结束时间" name="params[endCaseTime]"/>
+                            </li>
+                            <li>
+                                <label>案件性质：</label>
+                                <input type="text" name="caseXingzhi"/>
+                            </li>
+                            <li>
+                                <label>案件类型：</label>
+                                <select name="caseType" th:with="type=${@dict.getType('case_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>案件级别：</label>
+                                <select name="caseLevel" th:with="type=${@dict.getType('case_level')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <!--<li>
+                                <label>办理状态：</label>
+                                <select name="processCode">
+                                    <option value="0">所有</option>
+                                    <option value="1" selected="selected">待审核</option>
+                                    <option value="2">审核完成</option>
+                                </select>
+                            </li>-->
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-primary single disabled" onclick="$.operate.add()" shiro:hasPermission="code:trust:add">
+                    <i class="fa fa-edd"></i> 批量审核通过
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="code:trust:edit">
+                    <i class="fa fa-edit"></i> 批量审核退回
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="code:trust:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var detailFlag = [[${@permission.hasPermi('code:trustCheck:detail')}]];
+        var checkFlag = [[${@permission.hasPermi('code:trustCheck:checkFlag')}]];
+        var prefix = ctx + "code/trustCheck";
+
+        $(function() {
+            var options = {
+                url: prefix + "/wtCheckList",
+                createUrl: prefix + "/add",
+                detailUrl: ctx + "code/trust/detail/{id}",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "委托",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'code', 
+                    title: '编号'
+                },
+                {
+                    title: '委托时间',
+                    formatter: function (value, row, index) {
+                        return row.time.substring(0, 10);
+                    },
+                    sortable: true
+                },
+                {
+                    field: 'departmentName', 
+                    title: '委托单位名称'
+                },
+                {
+                    field: 'appraisalType', 
+                    title: '鉴定专业'
+                },
+                {
+                    field: 'caseName', 
+                    title: '案件名称'
+                },
+                {
+                    field: 'casePlace', 
+                    title: '案发地点'
+                },
+                {
+                    field: 'caseTime', 
+                    title: '案发时间',
+                    sortable: true
+                },
+                {
+                    field: 'caseXingzhi', 
+                    title: '案件性质'
+                },
+                {
+                    field: 'caseType', 
+                    title: '案件类型'
+                },
+                {
+                    field: 'caseLevel', 
+                    title: '案件级别'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>委托详情</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + checkFlag + '" href="javascript:void(0)" onclick="$.operate.pass(\'' + row.id + '\')"><i class="fa fa-submit"></i>通过</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + checkFlag + '" href="javascript:void(0)" onclick="$.operate.backModel(\'' + row.id + '\')"><i class="fa fa-submit"></i>退回</a> ');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增委托')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-trust-add">
+        <input name="id" type="hidden" th:value="${id}">
+        <h4 class="form-header h4">委托信息</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">编号：</label>
+                    <div class="col-sm-8">
+                        <input name="code" class="form-control" type="text" readonly placeholder="系统自动生成：日期yyyyMMdd+3位流水号">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">委托时间：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input name="time" class="form-control" placeholder="yyyy-mm-dd" type="text" th:value="${time}" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">委托单位：</label>
+                    <div class="col-sm-8">
+                        <input name="departmentId" type="hidden" th:value="${departmentId}">
+                        <input name="departmentName" class="form-control" type="text" th:value="${departmentName}" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">鉴定专业：</label>
+                    <div class="col-sm-8">
+                        <select id="appraisalType" name="appraisalType" class="form-control m-b" th:with="type=${@dict.getType('appraisal_type')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">主委托人：</label>
+                    <div class="col-sm-8">
+                        <input name="name1" class="form-control" type="text" th:value="${name1}" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">联系方式：</label>
+                    <div class="col-sm-8">
+                        <input name="tel1" class="form-control" type="text" th:value="${tel1}" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">职务：</label>
+                    <div class="col-sm-8">
+                        <select name="job1" class="form-control m-b" th:with="type=${@dict.getType('userjob')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:selected="${dict.dictValue} eq ${job1}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-xs-4 control-label is-required">证件类型：</label>
+                    <div class="col-xs-8">
+                        <select name="cardType1" class="form-control m-b" th:with="type=${@dict.getType('card_type')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:selected="${dict.dictValue} eq ${cardType1}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">证件编号：</label>
+                    <div class="col-sm-8">
+                        <input name="cardCode1" class="form-control" type="text" th:value="${cardCode1}" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">副委托人：</label>
+                    <div class="col-sm-8">
+                        <select name="name2" class="form-control m-b" th:with="type=${deptUserList}">
+                            <option>--请选择--</option>
+                            <option th:each="user : ${type}" th:text="${user.userName}" th:attr="userid=${user.userId}" th:value="${user.userName}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">联系方式：</label>
+                    <div class="col-sm-8">
+                        <input name="tel2" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">职务：</label>
+                    <div class="col-sm-8">
+                        <select name="job2" class="form-control m-b" th:with="type=${@dict.getType('userjob')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">证件类型：</label>
+                    <div class="col-sm-8">
+                        <select name="cardType2" class="form-control m-b" th:with="type=${@dict.getType('card_type')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">证件编号：</label>
+                    <div class="col-sm-8">
+                        <input name="cardCode2" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">鉴定要求：</label>
+                    <div class="col-xs-10">
+                        <textarea name="appraisalAsk" class="form-control" rows="3" th:text="${appraisalAsk}"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">鉴定方法要求：</label>
+                    <div class="col-xs-10">
+                        <textarea name="appraisalWayAsk" class="form-control" rows="3" th:text="${appraisalWayAsk}"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">原鉴定情况：</label>
+                    <div class="col-xs-10">
+                        <textarea name="appraisalWayAsk" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h4 class="form-header h4">案件信息</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">案件名称：</label>
+                    <div class="col-sm-8">
+                        <input name="caseName" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">案发时间：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input name="caseTime" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">案发地点：</label>
+                    <div class="col-sm-8">
+                        <input name="casePlace" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">案件级别：</label>
+                    <div class="col-sm-8">
+                        <select name="caseLevel" class="form-control m-b" th:with="type=${@dict.getType('case_level')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">案件性质：</label>
+                    <div class="col-sm-8">
+                        <select name="caseXingzhi" class="form-control m-b" th:with="type=${@dict.getType('case_xingzhi')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">案件类型：</label>
+                    <div class="col-sm-8">
+                        <select name="caseType" class="form-control m-b" th:with="type=${@dict.getType('case_type')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">简要案情：</label>
+                    <div class="col-xs-10">
+                        <textarea name="caseSummary" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <h4 class="form-header h4">检材列表</h4>
+    <div class="row">
+        <div class="col-sm-12">
+            <iframe th:src="@{/code/sample/{id}(id=${id})}" width="100%" height="450px" frameborder="0" name="物证列表" scrolling="auto">
+            </iframe>
+        </div>
+    </div>
+    <h4 class="form-header h4">委托申请书</h4>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="form-group">
+                        <div class="file-loading">
+                            <input id="fileinput" name="fileinput" class="form-control" type="file" multiple>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-offset-5 col-sm-10">
+        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存
+        </button>&nbsp;
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭
+        </button>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<th:block th:include="include :: bootstrap-fileinput-js" />
+<script type="text/javascript">
+    var uploadUrl = ctx + 'code/info/add/'+$("input[name='id']").val();
+    $(document).ready(function () {
+        $("#fileinput").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': uploadUrl,
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+            initialPreview: []
+        });
+    });
+
+    var prefix = ctx + "code/trust"
+    $("#form-trust-add").validate({
+        onkeyup: false,
+        rules:{
+            tel1:{
+                isPhone:true
+            },
+            tel2:{
+                isPhone:true
+            },
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.saveModal(prefix + "/add", $('#form-trust-add').serialize());
+        }
+    }
+
+    $("input[name='time']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='caseTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    function doSubmit(index, layero){
+        var tree = layero.find("iframe")[0].contentWindow.$._tree;
+        if ($.tree.notAllowParents(tree)) {
+            var body = layer.getChildFrame('body', index);
+            $("#treeId").val(body.find('#treeId').val());
+            $("#treeName").val(body.find('#treeName').val());
+            layer.close(index);
+        }
+    }
+    $("[name='name2']").change(function() {
+        var userId = $("[name='name2'] option:selected").attr("userid");
+        $.ajax({
+            type: "post",
+            url: ctx + "system/user/getUserById",
+            data: {
+                "userId": userId
+            },
+            success: function(r) {
+                var user = JSON.parse(r);
+                $("[name='tel2']").val(user.phonenumber);
+                $("[name='cardType2']").val(user.cardType);
+                $("[name='job2']").val(user.job);
+                $("[name='cardCode2']").val(user.cardCode);
+            }
+        })
+    });
+
+</script>
+</body>
+</html>

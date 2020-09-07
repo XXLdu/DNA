@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.code.mapper.SampleMapper">
+    
+    <resultMap type="Sample" id="SampleResult">
+        <result property="id"    column="ID"    />
+        <result property="code"    column="CODE"    />
+        <result property="trustId"    column="TRUST_ID"    />
+        <result property="physicalId"    column="PHYSICAL_ID"    />
+        <result property="physicalName"    column="PHYSICAL_NAME"    />
+        <result property="type"    column="TYPE"    />
+        <result property="kind"    column="KIND"    />
+        <result property="name"    column="NAME"    />
+        <result property="amount"    column="AMOUNT"    />
+        <result property="unit"    column="UNIT"    />
+        <result property="extractor"    column="EXTRACTOR"    />
+        <result property="extractTime"    column="EXTRACT_TIME"    />
+        <result property="extractPart"    column="EXTRACT_PART"    />
+        <result property="extractWay"    column="EXTRACT_WAY"    />
+        <result property="packCondition"    column="PACK_CONDITION"    />
+        <result property="xingzhuang"    column="XINGZHUANG"    />
+        <result property="miaosu"    column="MIAOSU"    />
+    </resultMap>
+
+    <sql id="selectSampleVo">
+        select ID, CODE, TRUST_ID, PHYSICAL_ID, PHYSICAL_NAME, TYPE, KIND, NAME, AMOUNT, UNIT, EXTRACTOR, EXTRACT_TIME, EXTRACT_PART, EXTRACT_WAY, PACK_CONDITION, XINGZHUANG, MIAOSU from sample
+    </sql>
+
+    <select id="selectSampleList" parameterType="Sample" resultMap="SampleResult">
+        <include refid="selectSampleVo"/>
+        <where>
+            <if test="trustId != null  and trustId    != ''"> and trust_id = #{trustId}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="kind != null  and kind != ''"> and KIND = #{kind}</if>
+            <if test="name != null  and name != ''"> and NAME like concat('%', #{name}, '%')</if>
+            <if test="amount != null "> and AMOUNT = #{amount}</if>
+            <if test="unit != null  and unit != ''"> and UNIT = #{unit}</if>
+            <if test="extractor != null  and extractor != ''"> and EXTRACTOR = #{extractor}</if>
+            <if test="extractTime != null "> and EXTRACT_TIME = #{extractTime}</if>
+            <if test="extractPart != null  and extractPart != ''"> and EXTRACT_PART = #{extractPart}</if>
+        </where>
+    </select>
+
+    <select id="selectSampleListByProcessCode" parameterType="Sample" resultMap="SampleResult">
+        <include refid="selectSampleVo"/>
+        <where>
+            TRUST_ID in ( SELECT id FROM trust WHERE process_code IN ( '5', '65', '75', '6', '76', '7', '8' ) )
+            <if test="trustId != null  and trustId    != ''"> and trust_id = #{trustId}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="kind != null  and kind != ''"> and KIND = #{kind}</if>
+            <if test="name != null  and name != ''"> and NAME like concat('%', #{name}, '%')</if>
+            <if test="amount != null "> and AMOUNT = #{amount}</if>
+            <if test="unit != null  and unit != ''"> and UNIT = #{unit}</if>
+            <if test="extractor != null  and extractor != ''"> and EXTRACTOR = #{extractor}</if>
+            <if test="extractTime != null "> and EXTRACT_TIME = #{extractTime}</if>
+            <if test="extractPart != null  and extractPart != ''"> and EXTRACT_PART = #{extractPart}</if>
+        </where>
+    </select>
+    
+    <select id="selectSampleById" parameterType="String" resultMap="SampleResult">
+        <include refid="selectSampleVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertSample" parameterType="Sample">
+        insert into sample
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">ID,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="trustId != null  and trustId != ''">TRUST_ID,</if>
+            <if test="physicalId != null  and physicalId != ''">PHYSICAL_ID,</if>
+            <if test="physicalName != null  and physicalName != ''">PHYSICAL_NAME,</if>
+            <if test="type != null  and type != ''">TYPE,</if>
+            <if test="kind != null  and kind != ''">KIND,</if>
+            <if test="name != null  and name != ''">NAME,</if>
+            <if test="amount != null ">AMOUNT,</if>
+            <if test="unit != null  and unit != ''">UNIT,</if>
+            <if test="extractor != null  and extractor != ''">EXTRACTOR,</if>
+            <if test="extractTime != null ">EXTRACT_TIME,</if>
+            <if test="extractPart != null  and extractPart != ''">EXTRACT_PART,</if>
+            <if test="extractWay != null  and extractWay != ''">EXTRACT_WAY,</if>
+            <if test="packCondition != null  and packCondition != ''">PACK_CONDITION,</if>
+            <if test="xingzhuang != null  and xingzhuang != ''">XINGZHUANG,</if>
+            <if test="miaosu != null  and miaosu != ''">MIAOSU,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="trustId != null  and trustId != ''">#{trustId},</if>
+            <if test="physicalId != null  and physicalId != ''">#{physicalId},</if>
+            <if test="physicalName != null  and physicalName != ''">#{physicalName},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="kind != null  and kind != ''">#{kind},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="amount != null ">#{amount},</if>
+            <if test="unit != null  and unit != ''">#{unit},</if>
+            <if test="extractor != null  and extractor != ''">#{extractor},</if>
+            <if test="extractTime != null ">#{extractTime},</if>
+            <if test="extractPart != null  and extractPart != ''">#{extractPart},</if>
+            <if test="extractWay != null  and extractWay != ''">#{extractWay},</if>
+            <if test="packCondition != null  and packCondition != ''">#{packCondition},</if>
+            <if test="xingzhuang != null  and xingzhuang != ''">#{xingzhuang},</if>
+            <if test="miaosu != null  and miaosu != ''">#{miaosu},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSample" parameterType="Sample">
+        update sample
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="trustId != null  and trustId != ''">TRUST_ID = #{trustId},</if>
+            <if test="physicalId != null  and physicalId != ''">PHYSICAL_ID = #{physicalId},</if>
+            <if test="physicalName != null  and physicalName != ''">PHYSICAL_NAME = #{physicalName},</if>
+            <if test="type != null  and type != ''">TYPE = #{type},</if>
+            <if test="kind != null  and kind != ''">KIND = #{kind},</if>
+            <if test="name != null  and name != ''">NAME = #{name},</if>
+            <if test="amount != null ">AMOUNT = #{amount},</if>
+            <if test="unit != null  and unit != ''">UNIT = #{unit},</if>
+            <if test="extractor != null  and extractor != ''">EXTRACTOR = #{extractor},</if>
+            <if test="extractTime != null ">EXTRACT_TIME = #{extractTime},</if>
+            <if test="extractPart != null  and extractPart != ''">EXTRACT_PART = #{extractPart},</if>
+            <if test="extractWay != null  and extractWay != ''">EXTRACT_WAY = #{extractWay},</if>
+            <if test="packCondition != null  and packCondition != ''">PACK_CONDITION = #{packCondition},</if>
+            <if test="xingzhuang != null  and xingzhuang != ''">XINGZHUANG = #{xingzhuang},</if>
+            <if test="miaosu != null  and miaosu != ''">MIAOSU = #{miaosu},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteSampleById" parameterType="String">
+        delete from sample where ID = #{id}
+    </delete>
+
+    <delete id="deleteSampleByIds" parameterType="String">
+        delete from sample where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

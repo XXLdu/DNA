@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.code.mapper.TrustCheckMapper">
+    
+    <resultMap type="Trust" id="TrustResult">
+        <result property="id"    column="ID"    />
+        <result property="code"    column="CODE"    />
+        <result property="time"    column="TIME"    />
+        <result property="departmentId"    column="DEPARTMENT_ID"    />
+        <result property="departmentName"    column="DEPARTMENT_NAME"    />
+        <result property="appraisalType"    column="APPRAISAL_TYPE"    />
+        <result property="name1"    column="NAME1"    />
+        <result property="tel1"    column="TEL1"    />
+        <result property="job1"    column="JOB1"    />
+        <result property="cardType1"    column="CARD_TYPE1"    />
+        <result property="cardCode1"    column="CARD_CODE1"    />
+        <result property="name2"    column="NAME2"    />
+        <result property="tel2"    column="TEL2"    />
+        <result property="job2"    column="JOB2"    />
+        <result property="cardType2"    column="CARD_TYPE2"    />
+        <result property="cardCode2"    column="CARD_CODE2"    />
+        <result property="appraisalAsk"    column="APPRAISAL_ASK"    />
+        <result property="appraisalWayAsk"    column="APPRAISAL_WAY_ASK"    />
+        <result property="oldAppraisal"    column="OLD_APPRAISAL"    />
+        <result property="caseName"    column="CASE_NAME"    />
+        <result property="casePlace"    column="CASE_PLACE"    />
+        <result property="caseTime"    column="CASE_TIME"    />
+        <result property="caseXingzhi"    column="CASE_XINGZHI"    />
+        <result property="caseType"    column="CASE_TYPE"    />
+        <result property="caseLevel"    column="CASE_LEVEL"    />
+        <result property="caseSummary"    column="CASE_SUMMARY"    />
+        <result property="processCode"    column="PROCESS_CODE"    />
+        <result property="appraisalEndTime"    column="APPRAISAL_END_TIME"    />
+    </resultMap>
+
+    <sql id="selectTrustVo">
+        select ID, CODE, TIME, DEPARTMENT_ID, DEPARTMENT_NAME, APPRAISAL_TYPE, NAME1, TEL1, JOB1, CARD_TYPE1, CARD_CODE1, NAME2, TEL2, JOB2, CARD_TYPE2, CARD_CODE2, APPRAISAL_ASK, APPRAISAL_WAY_ASK, OLD_APPRAISAL, CASE_NAME, CASE_PLACE, CASE_TIME, CASE_XINGZHI, CASE_TYPE, CASE_LEVEL, CASE_SUMMARY, PROCESS_CODE, APPRAISAL_END_TIME from trust
+    </sql>
+
+    <select id="selectTrustList" parameterType="Trust" resultMap="TrustResult">
+        <include refid="selectTrustVo"/>
+        <where>  
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+            <if test="time != null "> and TIME = #{time}</if>
+            <if test="departmentId != null  and departmentId != ''"> and DEPARTMENT_ID = #{departmentId}</if>
+            <if test="departmentName != null  and departmentName != ''"> and DEPARTMENT_NAME like concat('%', #{departmentName}, '%')</if>
+            <if test="appraisalType != null  and appraisalType != ''"> and APPRAISAL_TYPE = #{appraisalType}</if>
+            <if test="name1 != null  and name1 != ''"> and NAME1 = #{name1}</if>
+            <if test="tel1 != null  and tel1 != ''"> and TEL1 = #{tel1}</if>
+            <if test="job1 != null  and job1 != ''"> and JOB1 = #{job1}</if>
+            <if test="cardType1 != null  and cardType1 != ''"> and CARD_TYPE1 = #{cardType1}</if>
+            <if test="cardCode1 != null  and cardCode1 != ''"> and CARD_CODE1 = #{cardCode1}</if>
+            <if test="name2 != null  and name2 != ''"> and NAME2 = #{name2}</if>
+            <if test="tel2 != null  and tel2 != ''"> and TEL2 = #{tel2}</if>
+            <if test="job2 != null  and job2 != ''"> and JOB2 = #{job2}</if>
+            <if test="cardType2 != null  and cardType2 != ''"> and CARD_TYPE2 = #{cardType2}</if>
+            <if test="cardCode2 != null  and cardCode2 != ''"> and CARD_CODE2 = #{cardCode2}</if>
+            <if test="appraisalAsk != null  and appraisalAsk != ''"> and APPRAISAL_ASK = #{appraisalAsk}</if>
+            <if test="appraisalWayAsk != null  and appraisalWayAsk != ''"> and APPRAISAL_WAY_ASK = #{appraisalWayAsk}</if>
+            <if test="oldAppraisal != null  and oldAppraisal != ''"> and OLD_APPRAISAL = #{oldAppraisal}</if>
+            <if test="caseName != null  and caseName != ''"> and CASE_NAME like concat('%', #{caseName}, '%')</if>
+            <if test="casePlace != null  and casePlace != ''"> and CASE_PLACE = #{casePlace}</if>
+            <if test="caseTime != null "> and CASE_TIME = #{caseTime}</if>
+            <if test="caseXingzhi != null  and caseXingzhi != ''"> and CASE_XINGZHI = #{caseXingzhi}</if>
+            <if test="caseType != null  and caseType != ''"> and CASE_TYPE = #{caseType}</if>
+            <if test="caseLevel != null  and caseLevel != ''"> and CASE_LEVEL = #{caseLevel}</if>
+            <if test="caseSummary != null  and caseSummary != ''"> and CASE_SUMMARY = #{caseSummary}</if>
+            <if test="processCode != null  and processCode != ''"> and PROCESS_CODE = #{processCode}</if>
+            <if test="appraisalEndTime != null "> and APPRAISAL_END_TIME = #{appraisalEndTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectTrustById" parameterType="String" resultMap="TrustResult">
+        <include refid="selectTrustVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertTrust" parameterType="Trust">
+        insert into trust
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">ID,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="time != null ">TIME,</if>
+            <if test="departmentId != null  and departmentId != ''">DEPARTMENT_ID,</if>
+            <if test="departmentName != null  and departmentName != ''">DEPARTMENT_NAME,</if>
+            <if test="appraisalType != null  and appraisalType != ''">APPRAISAL_TYPE,</if>
+            <if test="name1 != null  and name1 != ''">NAME1,</if>
+            <if test="tel1 != null  and tel1 != ''">TEL1,</if>
+            <if test="job1 != null  and job1 != ''">JOB1,</if>
+            <if test="cardType1 != null  and cardType1 != ''">CARD_TYPE1,</if>
+            <if test="cardCode1 != null  and cardCode1 != ''">CARD_CODE1,</if>
+            <if test="name2 != null  and name2 != ''">NAME2,</if>
+            <if test="tel2 != null  and tel2 != ''">TEL2,</if>
+            <if test="job2 != null  and job2 != ''">JOB2,</if>
+            <if test="cardType2 != null  and cardType2 != ''">CARD_TYPE2,</if>
+            <if test="cardCode2 != null  and cardCode2 != ''">CARD_CODE2,</if>
+            <if test="appraisalAsk != null  and appraisalAsk != ''">APPRAISAL_ASK,</if>
+            <if test="appraisalWayAsk != null  and appraisalWayAsk != ''">APPRAISAL_WAY_ASK,</if>
+            <if test="oldAppraisal != null  and oldAppraisal != ''">OLD_APPRAISAL,</if>
+            <if test="caseName != null  and caseName != ''">CASE_NAME,</if>
+            <if test="casePlace != null  and casePlace != ''">CASE_PLACE,</if>
+            <if test="caseTime != null ">CASE_TIME,</if>
+            <if test="caseXingzhi != null  and caseXingzhi != ''">CASE_XINGZHI,</if>
+            <if test="caseType != null  and caseType != ''">CASE_TYPE,</if>
+            <if test="caseLevel != null  and caseLevel != ''">CASE_LEVEL,</if>
+            <if test="caseSummary != null  and caseSummary != ''">CASE_SUMMARY,</if>
+            <if test="processCode != null  and processCode != ''">PROCESS_CODE,</if>
+            <if test="appraisalEndTime != null ">APPRAISAL_END_TIME,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="time != null ">#{time},</if>
+            <if test="departmentId != null  and departmentId != ''">#{departmentId},</if>
+            <if test="departmentName != null  and departmentName != ''">#{departmentName},</if>
+            <if test="appraisalType != null  and appraisalType != ''">#{appraisalType},</if>
+            <if test="name1 != null  and name1 != ''">#{name1},</if>
+            <if test="tel1 != null  and tel1 != ''">#{tel1},</if>
+            <if test="job1 != null  and job1 != ''">#{job1},</if>
+            <if test="cardType1 != null  and cardType1 != ''">#{cardType1},</if>
+            <if test="cardCode1 != null  and cardCode1 != ''">#{cardCode1},</if>
+            <if test="name2 != null  and name2 != ''">#{name2},</if>
+            <if test="tel2 != null  and tel2 != ''">#{tel2},</if>
+            <if test="job2 != null  and job2 != ''">#{job2},</if>
+            <if test="cardType2 != null  and cardType2 != ''">#{cardType2},</if>
+            <if test="cardCode2 != null  and cardCode2 != ''">#{cardCode2},</if>
+            <if test="appraisalAsk != null  and appraisalAsk != ''">#{appraisalAsk},</if>
+            <if test="appraisalWayAsk != null  and appraisalWayAsk != ''">#{appraisalWayAsk},</if>
+            <if test="oldAppraisal != null  and oldAppraisal != ''">#{oldAppraisal},</if>
+            <if test="caseName != null  and caseName != ''">#{caseName},</if>
+            <if test="casePlace != null  and casePlace != ''">#{casePlace},</if>
+            <if test="caseTime != null ">#{caseTime},</if>
+            <if test="caseXingzhi != null  and caseXingzhi != ''">#{caseXingzhi},</if>
+            <if test="caseType != null  and caseType != ''">#{caseType},</if>
+            <if test="caseLevel != null  and caseLevel != ''">#{caseLevel},</if>
+            <if test="caseSummary != null  and caseSummary != ''">#{caseSummary},</if>
+            <if test="processCode != null  and processCode != ''">#{processCode},</if>
+            <if test="appraisalEndTime != null ">#{appraisalEndTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTrust" parameterType="Trust">
+        update trust
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="time != null ">TIME = #{time},</if>
+            <if test="departmentId != null  and departmentId != ''">DEPARTMENT_ID = #{departmentId},</if>
+            <if test="departmentName != null  and departmentName != ''">DEPARTMENT_NAME = #{departmentName},</if>
+            <if test="appraisalType != null  and appraisalType != ''">APPRAISAL_TYPE = #{appraisalType},</if>
+            <if test="name1 != null  and name1 != ''">NAME1 = #{name1},</if>
+            <if test="tel1 != null  and tel1 != ''">TEL1 = #{tel1},</if>
+            <if test="job1 != null  and job1 != ''">JOB1 = #{job1},</if>
+            <if test="cardType1 != null  and cardType1 != ''">CARD_TYPE1 = #{cardType1},</if>
+            <if test="cardCode1 != null  and cardCode1 != ''">CARD_CODE1 = #{cardCode1},</if>
+            <if test="name2 != null  and name2 != ''">NAME2 = #{name2},</if>
+            <if test="tel2 != null  and tel2 != ''">TEL2 = #{tel2},</if>
+            <if test="job2 != null  and job2 != ''">JOB2 = #{job2},</if>
+            <if test="cardType2 != null  and cardType2 != ''">CARD_TYPE2 = #{cardType2},</if>
+            <if test="cardCode2 != null  and cardCode2 != ''">CARD_CODE2 = #{cardCode2},</if>
+            <if test="appraisalAsk != null  and appraisalAsk != ''">APPRAISAL_ASK = #{appraisalAsk},</if>
+            <if test="appraisalWayAsk != null  and appraisalWayAsk != ''">APPRAISAL_WAY_ASK = #{appraisalWayAsk},</if>
+            <if test="oldAppraisal != null  and oldAppraisal != ''">OLD_APPRAISAL = #{oldAppraisal},</if>
+            <if test="caseName != null  and caseName != ''">CASE_NAME = #{caseName},</if>
+            <if test="casePlace != null  and casePlace != ''">CASE_PLACE = #{casePlace},</if>
+            <if test="caseTime != null ">CASE_TIME = #{caseTime},</if>
+            <if test="caseXingzhi != null  and caseXingzhi != ''">CASE_XINGZHI = #{caseXingzhi},</if>
+            <if test="caseType != null  and caseType != ''">CASE_TYPE = #{caseType},</if>
+            <if test="caseLevel != null  and caseLevel != ''">CASE_LEVEL = #{caseLevel},</if>
+            <if test="caseSummary != null  and caseSummary != ''">CASE_SUMMARY = #{caseSummary},</if>
+            <if test="processCode != null  and processCode != ''">PROCESS_CODE = #{processCode},</if>
+            <if test="appraisalEndTime != null ">APPRAISAL_END_TIME = #{appraisalEndTime},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteTrustById" parameterType="String">
+        delete from trust where ID = #{id}
+    </delete>
+
+    <delete id="deleteTrustByIds" parameterType="String">
+        delete from trust where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getTrustCode" resultType="String">
+	    SELECT LPAD( RIGHT ( t.CODE, 3 ) + 1, 3, 0 ) FROM trust t WHERE LEFT ( t.`CODE`, 8 ) = REPLACE ( CURRENT_DATE, '-', '' )
+	</select>
+</mapper>

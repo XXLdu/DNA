@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.code.mapper.DnaMapper">
+    
+    <resultMap type="Dna" id="DnaResult">
+        <result property="id"    column="ID"    />
+        <result property="code"    column="CODE"    />
+        <result property="trustId"    column="TRUST_ID"    />
+        <result property="name"    column="NAME"    />
+        <result property="caption"    column="CAPTION"    />
+        <result property="time"    column="TIME"    />
+    </resultMap>
+
+    <sql id="selectDnaVo">
+        select ID, CODE, TRUST_ID, NAME, CAPTION, TIME from dna
+    </sql>
+
+    <select id="selectDnaList" parameterType="Dna" resultMap="DnaResult">
+        <include refid="selectDnaVo"/>
+        <where>  
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+            <if test="trustId != null  and trustId != ''"> and TRUST_ID = #{trustId}</if>
+            <if test="name != null  and name != ''"> and NAME like concat('%', #{name}, '%')</if>
+            <if test="caption != null  and caption != ''"> and CAPTION = #{caption}</if>
+            <if test="time != null "> and TIME = #{time}</if>
+        </where>
+    </select>
+    
+    <select id="selectDnaById" parameterType="String" resultMap="DnaResult">
+        <include refid="selectDnaVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertDna" parameterType="Dna">
+        insert into dna
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">ID,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="trustId != null  and trustId != ''">TRUST_ID,</if>
+            <if test="name != null  and name != ''">NAME,</if>
+            <if test="caption != null  and caption != ''">CAPTION,</if>
+            <if test="time != null ">TIME,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="trustId != null  and trustId != ''">#{trustId},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="caption != null  and caption != ''">#{caption},</if>
+            <if test="time != null ">#{time},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDna" parameterType="Dna">
+        update dna
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="trustId != null  and trustId != ''">TRUST_ID = #{trustId},</if>
+            <if test="name != null  and name != ''">NAME = #{name},</if>
+            <if test="caption != null  and caption != ''">CAPTION = #{caption},</if>
+            <if test="time != null ">TIME = #{time},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteDnaById" parameterType="String">
+        delete from dna where ID = #{id}
+    </delete>
+
+    <delete id="deleteDnaByIds" parameterType="String">
+        delete from dna where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

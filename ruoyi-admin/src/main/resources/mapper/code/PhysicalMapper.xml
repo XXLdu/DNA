@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.code.mapper.PhysicalMapper">
+    
+    <resultMap type="Physical" id="PhysicalResult">
+        <result property="id"    column="ID"    />
+        <result property="code"    column="CODE"    />
+        <result property="trustId"    column="TRUST_ID"    />
+        <result property="name"    column="NAME"    />
+        <result property="type"    column="TYPE"    />
+        <result property="amout"    column="AMOUT"    />
+        <result property="unit"    column="UNIT"    />
+        <result property="extractorId"    column="EXTRACTOR_ID"    />
+        <result property="extractorName"    column="EXTRACTOR_NAME"    />
+        <result property="extractTime"    column="EXTRACT_TIME"    />
+        <result property="extractType"    column="EXTRACT_TYPE"    />
+        <result property="extractWay"    column="EXTRACT_WAY"    />
+        <result property="packCondition"    column="PACK_CONDITION"    />
+        <result property="shape"    column="SHAPE"    />
+        <result property="place"    column="PLACE"    />
+    </resultMap>
+
+    <sql id="selectPhysicalVo">
+        select t.ID, t.CODE, t.TRUST_ID, t.NAME, t.TYPE, t.AMOUT, t.UNIT, t.EXTRACTOR_ID, t.EXTRACTOR_NAME, t.EXTRACT_TIME, t.EXTRACT_TYPE, t.EXTRACT_WAY, t.PACK_CONDITION, t.SHAPE
+        from physical t
+        LEFT join physical_deliver k on t.id=k.PHYSICAL_ID
+    </sql>
+
+    <select id="selectPhysicalList" parameterType="Physical" resultMap="PhysicalResult">
+        <include refid="selectPhysicalVo"/>
+        <where>  
+            <if test="code != null  and code != ''"> and t.CODE = #{code}</if>
+            <if test="trustId != null  and trustId != ''"> and t.TRUST_ID = #{trustId}</if>
+            <if test="name != null  and name != ''"> and t.NAME like concat('%', #{name}, '%')</if>
+            <if test="type != null  and type != ''"> and t.TYPE = #{type}</if>
+            <if test="amout != null "> and t.AMOUT = #{amout}</if>
+            <if test="unit != null  and unit != ''"> and t.UNIT = #{unit}</if>
+            <if test="extractorId != null  and extractorId != ''"> and t.EXTRACTOR_ID = #{extractorId}</if>
+            <if test="extractorName != null  and extractorName != ''"> and t.EXTRACTOR_NAME like concat('%', #{extractorName}, '%')</if>
+            <if test="extractTime != null "> and t.EXTRACT_TIME = #{extractTime}</if>
+            <if test="extractType != null  and extractType != ''"> and t.EXTRACT_TYPE = #{extractType}</if>
+            <if test="extractWay != null  and extractWay != ''"> and t.EXTRACT_WAY = #{extractWay}</if>
+            <if test="packCondition != null  and packCondition != ''"> and t.PACK_CONDITION = #{packCondition}</if>
+            <if test="shape != null  and shape != ''"> and St.HAPE = #{shape}</if>
+        </where>
+    </select>
+    
+    <select id="selectPhysicalById" parameterType="String" resultMap="PhysicalResult">
+        <include refid="selectPhysicalVo"/>
+        where t.ID = #{id}
+    </select>
+        
+    <insert id="insertPhysical" parameterType="Physical">
+        insert into physical
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">ID,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="trustId != null  and trustId != ''">TRUST_ID,</if>
+            <if test="name != null  and name != ''">NAME,</if>
+            <if test="type != null  and type != ''">TYPE,</if>
+            <if test="amout != null ">AMOUT,</if>
+            <if test="unit != null  and unit != ''">UNIT,</if>
+            <if test="extractorId != null  and extractorId != ''">EXTRACTOR_ID,</if>
+            <if test="extractorName != null  and extractorName != ''">EXTRACTOR_NAME,</if>
+            <if test="extractTime != null ">EXTRACT_TIME,</if>
+            <if test="extractType != null  and extractType != ''">EXTRACT_TYPE,</if>
+            <if test="extractWay != null  and extractWay != ''">EXTRACT_WAY,</if>
+            <if test="packCondition != null  and packCondition != ''">PACK_CONDITION,</if>
+            <if test="shape != null  and shape != ''">SHAPE,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="trustId != null  and trustId != ''">#{trustId},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="amout != null ">#{amout},</if>
+            <if test="unit != null  and unit != ''">#{unit},</if>
+            <if test="extractorId != null  and extractorId != ''">#{extractorId},</if>
+            <if test="extractorName != null  and extractorName != ''">#{extractorName},</if>
+            <if test="extractTime != null ">#{extractTime},</if>
+            <if test="extractType != null  and extractType != ''">#{extractType},</if>
+            <if test="extractWay != null  and extractWay != ''">#{extractWay},</if>
+            <if test="packCondition != null  and packCondition != ''">#{packCondition},</if>
+            <if test="shape != null  and shape != ''">#{shape},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePhysical" parameterType="Physical">
+        update physical
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="trustId != null  and trustId != ''">TRUST_ID = #{trustId},</if>
+            <if test="name != null  and name != ''">NAME = #{name},</if>
+            <if test="type != null  and type != ''">TYPE = #{type},</if>
+            <if test="amout != null ">AMOUT = #{amout},</if>
+            <if test="unit != null  and unit != ''">UNIT = #{unit},</if>
+            <if test="extractorId != null  and extractorId != ''">EXTRACTOR_ID = #{extractorId},</if>
+            <if test="extractorName != null  and extractorName != ''">EXTRACTOR_NAME = #{extractorName},</if>
+            <if test="extractTime != null ">EXTRACT_TIME = #{extractTime},</if>
+            <if test="extractType != null  and extractType != ''">EXTRACT_TYPE = #{extractType},</if>
+            <if test="extractWay != null  and extractWay != ''">EXTRACT_WAY = #{extractWay},</if>
+            <if test="packCondition != null  and packCondition != ''">PACK_CONDITION = #{packCondition},</if>
+            <if test="shape != null  and shape != ''">SHAPE = #{shape},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deletePhysicalById" parameterType="String">
+        delete from physical where ID = #{id}
+    </delete>
+
+    <delete id="deletePhysicalByIds" parameterType="String">
+        delete from physical where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

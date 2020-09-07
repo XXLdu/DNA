@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.code.mapper.RuleMapper">
+    
+    <resultMap type="Rule" id="RuleResult">
+        <result property="id"    column="ID"    />
+        <result property="code"    column="CODE"    />
+        <result property="name"    column="NAME"    />
+        <result property="content"    column="CONTENT"    />
+        <result property="longcontent"    column="LONGCONTENT"    />
+    </resultMap>
+
+    <sql id="selectRuleVo">
+        select ID, CODE, NAME, CONTENT, LONGCONTENT from rule
+    </sql>
+
+    <select id="selectRuleList" parameterType="Rule" resultMap="RuleResult">
+        <include refid="selectRuleVo"/>
+        <where>  
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+            <if test="name != null  and name != ''"> and NAME like concat('%', #{name}, '%')</if>
+            <if test="content != null  and content != ''"> and CONTENT = #{content}</if>
+            <if test="longcontent != null  and longcontent != ''"> and LONGCONTENT = #{longcontent}</if>
+        </where>
+    </select>
+    
+    <select id="selectRuleById" parameterType="String" resultMap="RuleResult">
+        <include refid="selectRuleVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertRule" parameterType="Rule">
+        insert into rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">ID,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="name != null  and name != ''">NAME,</if>
+            <if test="content != null  and content != ''">CONTENT,</if>
+            <if test="longcontent != null  and longcontent != ''">LONGCONTENT,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="longcontent != null  and longcontent != ''">#{longcontent},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRule" parameterType="Rule">
+        update rule
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="name != null  and name != ''">NAME = #{name},</if>
+            <if test="content != null  and content != ''">CONTENT = #{content},</if>
+            <if test="longcontent != null  and longcontent != ''">LONGCONTENT = #{longcontent},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteRuleById" parameterType="String">
+        delete from rule where ID = #{id}
+    </delete>
+
+    <delete id="deleteRuleByIds" parameterType="String">
+        delete from rule where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.code.mapper.SuggestionMapper">
+
+    <resultMap type="Suggestion" id="SuggestionResult">
+        <result property="id"    column="ID"    />
+        <result property="parentid"    column="PARENTID"    />
+        <result property="time"    column="TIME"    />
+        <result property="userId"    column="USER_ID"    />
+        <result property="userName"    column="USER_NAME"    />
+        <result property="code"    column="CODE"    />
+        <result property="status"    column="STATUS"    />
+        <result property="suggestion"    column="SUGGESTION"    />
+    </resultMap>
+
+    <insert id="insertSuggestion" parameterType="Suggestion">
+        insert into suggestion
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">ID,</if>
+            <if test="parentid != null  and code != ''">PARENTID,</if>
+            <if test="time != null ">TIME,</if>
+            <if test="userId != null  and userId != ''">USER_ID,</if>
+            <if test="userName != null  and userName != ''">USER_NAME,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="suggestion != null  and suggestion != ''">SUGGESTION,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="parentid != null  and code != ''">#{parentid},</if>
+            <if test="time != null ">#{time},</if>
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="userName != null  and userName != ''">#{userName},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="suggestion != null  and suggestion != ''">#{suggestion},</if>
+        </trim>
+    </insert>
+
+</mapper>

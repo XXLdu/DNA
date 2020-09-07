@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.code.mapper.AppraisalfileMapper">
+    
+    <resultMap type="Appraisalfile" id="AppraisalfileResult">
+        <result property="id"    column="ID"    />
+        <result property="code"    column="CODE"    />
+        <result property="trustId"    column="TRUST_ID"    />
+        <result property="time"    column="TIME"    />
+        <result property="issuedCode"    column="ISSUED_CODE"    />
+        <result property="content"    column="CONTENT"    />
+    </resultMap>
+
+    <sql id="selectAppraisalfileVo">
+        select ID, CODE, TRUST_ID, TIME, ISSUED_CODE, CONTENT from appraisalfile
+    </sql>
+
+    <select id="selectAppraisalfileList" parameterType="Appraisalfile" resultMap="AppraisalfileResult">
+        <include refid="selectAppraisalfileVo"/>
+        <where>  
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+            <if test="trustId != null  and trustId != ''"> and TRUST_ID = #{trustId}</if>
+            <if test="time != null "> and TIME = #{time}</if>
+            <if test="issuedCode != null  and issuedCode != ''"> and ISSUED_CODE = #{issuedCode}</if>
+            <if test="content != null  and content != ''"> and CONTENT = #{content}</if>
+        </where>
+    </select>
+    
+    <select id="selectAppraisalfileById" parameterType="String" resultMap="AppraisalfileResult">
+        <include refid="selectAppraisalfileVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertAppraisalfile" parameterType="Appraisalfile">
+        insert into appraisalfile
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">ID,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="trustId != null  and trustId != ''">TRUST_ID,</if>
+            <if test="time != null ">TIME,</if>
+            <if test="issuedCode != null  and issuedCode != ''">ISSUED_CODE,</if>
+            <if test="content != null  and content != ''">CONTENT,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="trustId != null  and trustId != ''">#{trustId},</if>
+            <if test="time != null ">#{time},</if>
+            <if test="issuedCode != null  and issuedCode != ''">#{issuedCode},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAppraisalfile" parameterType="Appraisalfile">
+        update appraisalfile
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="trustId != null  and trustId != ''">TRUST_ID = #{trustId},</if>
+            <if test="time != null ">TIME = #{time},</if>
+            <if test="issuedCode != null  and issuedCode != ''">ISSUED_CODE = #{issuedCode},</if>
+            <if test="content != null  and content != ''">CONTENT = #{content},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteAppraisalfileById" parameterType="String">
+        delete from appraisalfile where ID = #{id}
+    </delete>
+
+    <delete id="deleteAppraisalfileByIds" parameterType="String">
+        delete from appraisalfile where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

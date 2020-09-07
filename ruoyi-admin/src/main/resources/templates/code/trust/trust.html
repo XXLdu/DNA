@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('委托列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li class="select-time">
+                                <label>委托时间：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[startTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                            </li>
+                            <li>
+                                <label>委托单位：</label>
+                                <input type="text" name="departmentName"/>
+                            </li>
+                            <li>
+                                <label>鉴定专业：</label>
+                                <select name="appraisalType" th:with="type=${@dict.getType('appraisal_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>案件名称：</label>
+                                <input type="text" name="caseName"/>
+                            </li>
+                            <li>
+                                <label>案发地点：</label>
+                                <input type="text" name="casePlace"/>
+                            </li>
+                            <li class="select-time">
+                                <label>案发时间：</label>
+                                <input type="text" class="time-input" id="beginCaseTime" placeholder="开始时间" name="params[beginCaseTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endCaseTime" placeholder="结束时间" name="params[endCaseTime]"/>
+                            </li>
+                            <li>
+                                <label>案件性质：</label>
+                                <input type="text" name="caseXingzhi"/>
+                            </li>
+                            <li>
+                                <label>案件类型：</label>
+                                <select name="caseType" th:with="type=${@dict.getType('case_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>案件级别：</label>
+                                <select name="caseLevel" th:with="type=${@dict.getType('case_level')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="code:trust:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="code:trust:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="code:trust:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var detailFlag = [[${@permission.hasPermi('code:trust:detail')}]];
+        var editFlag = [[${@permission.hasPermi('code:trust:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('code:trust:remove')}]];
+        var submitFlag = [[${@permission.hasPermi('code:trust:submit')}]];
+
+        var prefix = ctx + "code/trust";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                detailUrl: prefix + "/detail/{id}",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                templateUrl: prefix + "/template/{id}/{processCode}",
+                modalName: "委托",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'code', 
+                    title: '编号'
+                },
+                {
+                    title: '委托时间',
+                    formatter: function (value, row, index) {
+                        return row.time.substring(0, 10);
+                    },
+                    sortable: true
+                },
+                {
+                    field: 'departmentName', 
+                    title: '委托单位名称'
+                },
+                {
+                    field: 'appraisalType', 
+                    title: '鉴定专业'
+                },
+                {
+                    field: 'caseName', 
+                    title: '案件名称'
+                },
+                {
+                    field: 'casePlace', 
+                    title: '案发地点'
+                },
+                {
+                    field: 'caseTime', 
+                    title: '案发时间',
+                    sortable: true
+                },
+                {
+                    field: 'caseXingzhi', 
+                    title: '案件性质'
+                },
+                {
+                    field: 'caseType', 
+                    title: '案件类型'
+                },
+                {
+                    field: 'caseLevel', 
+                    title: '案件级别'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>委托详情</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editFull(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        switch (row.processCode) {
+                            case '0': case '10':
+                                actions.push('<a class="btn btn-success btn-xs ' + submitFlag + '" href="javascript:void(0)" ' +
+                                    'onclick="$.operate.pass(\'' + row.id + '\')">' +
+                                    '<i class="fa fa-submit"></i>提交所长</a>');
+                                break;
+                            case '1':
+                                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" ' +
+                                    'onclick="$.operate.template(\'' + row.id + '\',\'' + row.processCode + '\')">' +
+                                    '<i class="fa fa-submit"></i>下载鉴定委托书</a>');
+                                break;
+                            case '2': case '32':
+                                actions.push('<a class="btn btn-success btn-xs ' + submitFlag + '" href="javascript:void(0)" ' +
+                                    'onclick="$.operate.pass(\'' + row.id + '\')">' +
+                                    '<i class="fa fa-submit"></i>提交审批</a>');
+                                break;
+                            case '4':
+                                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" ' +
+                                    'onclick="$.operate.template(\'' + row.id + '\',\'' + row.processCode + '\')">' +
+                                    '<i class="fa fa-submit"></i>下载鉴定事项确认书</a>');
+                                break;
+                            case '7':
+                                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" ' +
+                                    'onclick="$.operate.template(\'' + row.id + '\',\'' + row.processCode + '\')">' +
+                                    '<i class="fa fa-submit"></i>下载鉴定文书审批表</a>');
+                                break;
+                            default:
+                        }
+
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" ' +
+                            'onclick="RFE(\'' + row.id + '\')">' +
+                            '<i class="fa fa-edit"></i>查看补充材料通知</a> ');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        //补充材料
+        function RFE(trustId) {
+            var url =  ctx + "code/rfe/"+trustId+"?operateType=L";
+            $.modal.openFull("补充材料", url);
+        }
+    </script>
+</body>
+</html>

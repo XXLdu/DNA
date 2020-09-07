@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('检材列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" th:onclick="add()"  shiro:hasPermission="code:sample:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="code:sample:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('code:sample:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('code:sample:remove')}]];
+        var prefix = ctx + "code/sample";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list/"+[[${trust_id}]],
+                createUrl: prefix + "/add/{fid}",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "检材",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id', 
+                    title: '主键',
+                    visible: false
+                },
+                {
+                    field: 'type', 
+                    title: '类型'
+                },
+                {
+                    field: 'kind', 
+                    title: '种类'
+                },
+                {
+                    field: 'name', 
+                    title: '名称'
+                },
+                {
+                    field: 'amount', 
+                    title: '数量'
+                },
+                {
+                    field: 'unit', 
+                    title: '单位'
+                },
+                {
+                    field: 'extractor', 
+                    title: '提取人'
+                },
+                {
+                    field: 'extractTime', 
+                    title: '提取时间'
+                },
+                {
+                    field: 'extractPart', 
+                    title: '提取部位'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editFull(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function add() {
+            var trust_id = [[${trust_id}]];
+            $.operate.addFull(trust_id);
+        }
+    </script>
+</body>
+</html>

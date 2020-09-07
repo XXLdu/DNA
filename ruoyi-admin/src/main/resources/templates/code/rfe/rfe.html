@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('补充材料列表')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="btn-group-sm" id="toolbar" role="group" th:style="${operateType=='L'?'display:none':''}">
+            <a class="btn btn-success" th:onclick="add()" shiro:hasPermission="code:rfe:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="code:rfe:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('code:rfe:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('code:rfe:remove')}]];
+    var prefix = ctx + "code/rfe";
+
+    $(function() {
+        var options = {
+            url: prefix + "/list/"+[[${trust_id}]],
+            createUrl: prefix + "/add/{fid}",
+            detailUrl: prefix + "/edit/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "补充材料",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '主键',
+                    visible: false
+                },
+                {
+                    field: 'code',
+                    title: '编号'
+                },
+                {
+                    field: 'startTime',
+                    title: '补充开始时间'
+                },
+                {
+                    field: 'endTime',
+                    title: '补充结束时间'
+                },
+                {
+                    field: 'explain',
+                    title: '补充说明'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        var operateType = [[${operateType}]];
+                        switch (operateType) {
+                            case 'L':
+                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>查看</a>');
+                                break;
+                            default:
+                                actions.push('<a class="edit btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editFull(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                                actions.push('<a class="remove btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        }
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+    function add() {
+        var trust_id = [[${trust_id}]];
+        $.operate.addFull(trust_id);
+    }
+</script>
+</body>
+</html>

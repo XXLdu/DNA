@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.code.mapper.TestrecordMapper">
+    
+    <resultMap type="Testrecord" id="TestrecordResult">
+        <result property="id"    column="ID"    />
+        <result property="trustId"    column="TRUST_ID"    />
+        <result property="tester1"    column="TESTER1"    />
+        <result property="tester2"    column="TESTER2"    />
+        <result property="reviewer"    column="REVIEWER"    />
+        <result property="testPlace"    column="TEST_PLACE"    />
+        <result property="testHome"    column="TEST_HOME"    />
+        <result property="temperarure"    column="TEMPERARURE"    />
+        <result property="humidity"    column="HUMIDITY"    />
+        <result property="conclusion"    column="CONCLUSION"    />
+    </resultMap>
+
+    <sql id="selectTestrecordVo">
+        select ID, TRUST_ID, TESTER1, TESTER2, REVIEWER, TEST_PLACE, TEST_HOME, TEMPERARURE, HUMIDITY, CONCLUSION from testrecord
+    </sql>
+
+    <select id="selectTestrecordList" parameterType="Testrecord" resultMap="TestrecordResult">
+        <include refid="selectTestrecordVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectTestrecordById" parameterType="String" resultMap="TestrecordResult">
+        <include refid="selectTestrecordVo"/>
+        where ID = #{id}
+    </select>
+
+    <select id="selectTestrecordByTrustId" parameterType="String" resultMap="TestrecordResult">
+        <include refid="selectTestrecordVo"/>
+        where TRUST_ID = #{trustId}
+    </select>
+        
+    <insert id="insertTestrecord" parameterType="Testrecord">
+        insert into testrecord
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">ID,</if>
+            <if test="trustId != null  and trustId != ''">TRUST_ID,</if>
+            <if test="tester1 != null  and tester1 != ''">TESTER1,</if>
+            <if test="tester2 != null  and tester2 != ''">TESTER2,</if>
+            <if test="reviewer != null  and reviewer != ''">REVIEWER,</if>
+            <if test="testPlace != null  and testPlace != ''">TEST_PLACE,</if>
+            <if test="testHome != null  and testHome != ''">TEST_HOME,</if>
+            <if test="temperarure != null ">TEMPERARURE,</if>
+            <if test="humidity != null ">HUMIDITY,</if>
+            <if test="conclusion != null  and conclusion != ''">CONCLUSION,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="trustId != null  and trustId != ''">#{trustId},</if>
+            <if test="tester1 != null  and tester1 != ''">#{tester1},</if>
+            <if test="tester2 != null  and tester2 != ''">#{tester2},</if>
+            <if test="reviewer != null  and reviewer != ''">#{reviewer},</if>
+            <if test="testPlace != null  and testPlace != ''">#{testPlace},</if>
+            <if test="testHome != null  and testHome != ''">#{testHome},</if>
+            <if test="temperarure != null ">#{temperarure},</if>
+            <if test="humidity != null ">#{humidity},</if>
+            <if test="conclusion != null  and conclusion != ''">#{conclusion},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTestrecord" parameterType="Testrecord">
+        update testrecord
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="trustId != null  and trustId != ''">TRUST_ID = #{trustId},</if>
+            <if test="tester1 != null  and tester1 != ''">TESTER1 = #{tester1},</if>
+            <if test="tester2 != null  and tester2 != ''">TESTER2 = #{tester2},</if>
+            <if test="reviewer != null  and reviewer != ''">REVIEWER = #{reviewer},</if>
+            <if test="testPlace != null  and testPlace != ''">TEST_PLACE = #{testPlace},</if>
+            <if test="testHome != null  and testHome != ''">TEST_HOME = #{testHome},</if>
+            <if test="temperarure != null ">TEMPERARURE = #{temperarure},</if>
+            <if test="humidity != null ">HUMIDITY = #{humidity},</if>
+            <if test="conclusion != null  and conclusion != ''">CONCLUSION = #{conclusion},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteTestrecordById" parameterType="String">
+        delete from testrecord where ID = #{id}
+    </delete>
+
+    <delete id="deleteTestrecordByIds" parameterType="String">
+        delete from testrecord where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
