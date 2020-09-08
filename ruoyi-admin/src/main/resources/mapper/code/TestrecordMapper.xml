@@ -15,10 +15,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="temperarure"    column="TEMPERARURE"    />
         <result property="humidity"    column="HUMIDITY"    />
         <result property="conclusion"    column="CONCLUSION"    />
+        <result property="startTime"    column="STARTTIME"    />
     </resultMap>
 
     <sql id="selectTestrecordVo">
-        select ID, TRUST_ID, TESTER1, TESTER2, REVIEWER, TEST_PLACE, TEST_HOME, TEMPERARURE, HUMIDITY, CONCLUSION from testrecord
+        select ID, TRUST_ID, STARTTIME, TESTER1, TESTER2, REVIEWER, TEST_PLACE, TEST_HOME, TEMPERARURE, HUMIDITY, CONCLUSION from testrecord
     </sql>
 
     <select id="selectTestrecordList" parameterType="Testrecord" resultMap="TestrecordResult">
@@ -50,6 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="temperarure != null ">TEMPERARURE,</if>
             <if test="humidity != null ">HUMIDITY,</if>
             <if test="conclusion != null  and conclusion != ''">CONCLUSION,</if>
+            <if test="startTime != null  ">STARTTIME,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null  and id != ''">#{id},</if>
@@ -62,6 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="temperarure != null ">#{temperarure},</if>
             <if test="humidity != null ">#{humidity},</if>
             <if test="conclusion != null  and conclusion != ''">#{conclusion},</if>
+            <if test="startTime != null ">#{startTime},</if>
          </trim>
     </insert>
 
@@ -77,6 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="temperarure != null ">TEMPERARURE = #{temperarure},</if>
             <if test="humidity != null ">HUMIDITY = #{humidity},</if>
             <if test="conclusion != null  and conclusion != ''">CONCLUSION = #{conclusion},</if>
+            <if test="startTime != null ">STARTTIME = #{startTime},</if>
         </trim>
         where ID = #{id}
     </update>

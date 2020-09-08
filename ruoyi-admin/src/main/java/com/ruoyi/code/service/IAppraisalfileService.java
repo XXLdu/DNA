@@ -1,7 +1,8 @@
 package com.ruoyi.code.service;
 
-import java.util.List;
 import com.ruoyi.code.domain.Appraisalfile;
+
+import java.util.List;
 
 /**
  * 鉴定文书（APPRAISALFILE）Service接口
@@ -58,4 +59,7 @@ public interface IAppraisalfileService
      * @return 结果
      */
     public int deleteAppraisalfileById(String id);
+
+
+    public String getAppraisalfileContent(String id);
 }

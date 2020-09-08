@@ -1,9 +1,10 @@
 package com.ruoyi.code.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.Date;
 
 /**
@@ -35,8 +36,12 @@ public class Testrecord extends BaseEntity
     @Excel(name = "检验复核人")
     private String reviewer;
 
+    /** 检验开始时间 */
+    @Excel(name = "检验开始时间")
+    private Date startTime;
+
     /** 检验地点 */
-    @Excel(name = "检验地点")
+   @Excel(name = "检验地点")
     private String testPlace;
 
     /** 检验室 */
@@ -133,6 +138,14 @@ public class Testrecord extends BaseEntity
 
     public void setConclusion(String conclusion) {
         this.conclusion = conclusion;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
     @Override

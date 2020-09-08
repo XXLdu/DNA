@@ -19,9 +19,12 @@ public class Trust extends BaseEntity
     /** ID	主键 UUID() */
     private String id;
 
-    /** 编号	系统按照编号规则自动生成 */
-    @Excel(name = "编号	系统按照编号规则自动生成")
+    /** 委托编号	系统按照编号规则自动生成 */
+    @Excel(name = "委托编号")
     private String code;
+
+    @Excel(name = "受理编号")
+    private String AcceptCode;
 
     /** 委托时间 */
     @Excel(name = "委托时间", width = 30, dateFormat = "yyyy-MM-dd")
@@ -154,12 +157,21 @@ public class Trust extends BaseEntity
     {
         return code;
     }
-    public void setTime(Date time) 
+
+    public String getAcceptCode() {
+        return AcceptCode;
+    }
+
+    public void setAcceptCode(String acceptCode) {
+        AcceptCode = acceptCode;
+    }
+
+    public void setTime(Date time)
     {
         this.time = time;
     }
 
-    public Date getTime() 
+    public Date getTime()
     {
         return time;
     }

@@ -1,14 +1,12 @@
 package com.ruoyi.code.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 委托对象 trust
@@ -26,6 +24,9 @@ public class TrustParam extends BaseEntity
     /** 编号	系统按照编号规则自动生成 */
     @Excel(name = "编号	系统按照编号规则自动生成")
     private String code;
+
+    /** 受理编号 */
+    private String acceptcode;
 
     /** 委托时间 */
     @Excel(name = "委托时间", width = 30, dateFormat = "yyyy-MM-dd")
@@ -158,6 +159,15 @@ public class TrustParam extends BaseEntity
     {
         return code;
     }
+
+    public String getAcceptcode() {
+        return acceptcode;
+    }
+
+    public void setAcceptcode(String acceptcode) {
+        this.acceptcode = acceptcode;
+    }
+
     public void setTime(Date time)
     {
         this.time = time;

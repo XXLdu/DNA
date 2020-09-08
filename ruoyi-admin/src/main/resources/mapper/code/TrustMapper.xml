@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="Trust" id="TrustResult">
         <result property="id"    column="ID"    />
         <result property="code"    column="CODE"    />
+        <result property="acceptcode"    column="ACCEPT_CODE"    />
         <result property="time"    column="TIME"    />
         <result property="departmentId"    column="DEPARTMENT_ID"    />
         <result property="departmentName"    column="DEPARTMENT_NAME"    />
@@ -34,15 +35,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="processCode"    column="PROCESS_CODE"    />
         <result property="appraisalEndTime"    column="APPRAISAL_END_TIME"    />
     </resultMap>
-
     <sql id="selectTrustVo">
-        select ID, CODE, TIME, DEPARTMENT_ID, DEPARTMENT_NAME, APPRAISAL_TYPE, NAME1, TEL1, JOB1, CARD_TYPE1, CARD_CODE1, NAME2, TEL2, JOB2, CARD_TYPE2, CARD_CODE2, APPRAISAL_ASK, APPRAISAL_WAY_ASK, OLD_APPRAISAL, CASE_NAME, CASE_PLACE, CASE_TIME, CASE_XINGZHI, CASE_TYPE, CASE_LEVEL, CASE_SUMMARY, PROCESS_CODE, APPRAISAL_END_TIME from trust
+        select ID, CODE, ACCEPT_CODE, TIME, DEPARTMENT_ID, DEPARTMENT_NAME, APPRAISAL_TYPE, NAME1, TEL1, JOB1, CARD_TYPE1, CARD_CODE1, NAME2, TEL2, JOB2, CARD_TYPE2, CARD_CODE2, APPRAISAL_ASK, APPRAISAL_WAY_ASK, OLD_APPRAISAL, CASE_NAME, CASE_PLACE, CASE_TIME, CASE_XINGZHI, CASE_TYPE, CASE_LEVEL, CASE_SUMMARY, PROCESS_CODE, APPRAISAL_END_TIME from trust
     </sql>
 
     <select id="selectTrustList" parameterType="TrustParam" resultMap="TrustResult">
         <include refid="selectTrustVo"/>
         <where>  
             <if test="code != null  and code != ''"> and CODE = #{code}</if>
+            <if test="acceptcode != null  and acceptcode != ''"> and ACCEPT_CODE = #{acceptcode}</if>
             <if test="time != null "> and TIME = #{time}</if>
             <if test="departmentId != null  and departmentId != ''"> and DEPARTMENT_ID = #{departmentId}</if>
             <if test="departmentName != null  and departmentName != ''"> and DEPARTMENT_NAME like concat('%', #{departmentName}, '%')</if>

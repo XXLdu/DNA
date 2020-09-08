@@ -5,8 +5,10 @@ import org.apache.poi.hwpf.usermodel.Range;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-public class GreatJdws {
 
+public class GreatJdws {
+    private static String outPath = "D:\\JXGA\\out\\";
+    private static String inpPath = "D:\\JXGA\\DNAmuban.doc";
 
     /**
      * @param args
@@ -30,28 +32,23 @@ public class GreatJdws {
         map.put("{dejdr}", "第二鉴定人");  //第二鉴定人
         map.put("{sqqzr}", "授权签字人");  //授权签字人
         map.put("{sj}", "时间");  //时间
-        String srcPath = "D:\\JXGA\\DNAmuban.doc";
-        readwriteWord(srcPath, map);
+        readwriteWord(map);
 
-        String abc = "20140301";
-        System.out.println(abc.substring(6, 8));
-        String iccard = Long.toHexString(Long.valueOf("123"));
     }
 
     /**
      * 实现对word读取和修改操作
      *
-     * @param filePath
-     *            word模板路径和名称
+     * @param
      * @param map
      *            待填充的数据，从数据库读取
      */
-    public static void readwriteWord(String filePath, Map<String, String> map)
+    public static String readwriteWord(Map<String, String> map)
     {
         FileInputStream in = null;
         try
         {
-            in = new FileInputStream(new File(filePath));
+            in = new FileInputStream(new File(inpPath));
         }
         catch (FileNotFoundException e1)
         {
@@ -78,7 +75,7 @@ public class GreatJdws {
         FileOutputStream out = null;
         try
         {
-            out = new FileOutputStream("D:\\JXGA\\out\\" + fileName, true);
+            out = new FileOutputStream(outPath + fileName, true);
         }
         catch (FileNotFoundException e)
         {
@@ -101,6 +98,13 @@ public class GreatJdws {
         {
             e.printStackTrace();
         }
-
+        try {
+            System.out.println("生成鉴定文书成功");
+            return WordToHtml.Word2003ToHtml(outPath + fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("生成鉴定文书失败");
+            return "生成鉴定文书失败";
+        }
     }
 }

@@ -65,7 +65,7 @@ public class AppraisalfileController extends BaseController
         return getDataTable(list);
     }
 
-    //跳转文书起草列表
+    //跳转文书起草页面
     @RequiresPermissions("code:appraisalfile:view")
     @GetMapping("draftDoc/{trust_id}")
     public String draftDoc(@PathVariable("trust_id") String trust_id, ModelMap mmap)
@@ -78,10 +78,10 @@ public class AppraisalfileController extends BaseController
             mmap.put("appraisalfile",appraisalfile);
         }else{
             String uuid = UUID.randomUUID().toString().replaceAll("-","");
-            Rule ruleParam = ruleService.selectRuleById("DNACONTENT");
+            String content = appraisalfileService.getAppraisalfileContent(trust_id);
             appraisalfile.setTrustId(trust_id);
             appraisalfile.setId(uuid);
-            appraisalfile.setContent(ruleParam.getLongcontent());
+            appraisalfile.setContent(content);
             mmap.put("appraisalfile",appraisalfile);
         }
         return prefix + "/draftDoc";

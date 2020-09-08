@@ -26,14 +26,26 @@ import java.io.*;
  */
 public class WordToHtml {
 
+    public static void main(String[] args) {
+        /*try {
+            Word2003ToHtml();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }*/
+    }
+
     /**
      * 2007版本word转换成html
      * @throws IOException
      */
     public void Word2007ToHtml() throws IOException {
-        String filepath = "C:/test/";
-        String fileName = "滕王阁序2007.docx";
-        String htmlName = "滕王阁序2007.html";
+        String filepath = "D:/JXGA/out/";
+        String fileName = "1599488651186.docx";
+        String htmlName = "1599488651186.html";
         final String file = filepath + fileName;
         File f = new File(file);
         if (!f.exists()) {
@@ -75,13 +87,13 @@ public class WordToHtml {
      * @throws TransformerException
      * @throws ParserConfigurationException
      */
-    public void Word2003ToHtml() throws IOException, TransformerException, ParserConfigurationException {
-        String filepath = "C:/test/";
+    public static String Word2003ToHtml(String filepath) throws IOException, TransformerException, ParserConfigurationException {
         final String imagepath = "C:/test/image/";
-        String fileName = "滕王阁序2003.doc";
-        String htmlName = "滕王阁序2003.html";
-        final String file = filepath + fileName;
-        InputStream input = new FileInputStream(new File(file));
+        /*String filepath = "D:/JXGA/out/";
+        String fileName = "1599488651186.doc";
+        String htmlName = "1599488651186.html";
+        final String file = filepath + fileName;*/
+        InputStream input = new FileInputStream(new File(filepath));
         HWPFDocument wordDocument = new HWPFDocument(input);
         WordToHtmlConverter wordToHtmlConverter = new WordToHtmlConverter(DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument());
         //设置图片存放的位置
@@ -109,12 +121,12 @@ public class WordToHtml {
         wordToHtmlConverter.processDocument(wordDocument);
         Document htmlDocument = wordToHtmlConverter.getDocument();
 
-        File htmlFile = new File(filepath + htmlName);
-        OutputStream outStream = new FileOutputStream(htmlFile);
+//        File htmlFile = new File(filepath + htmlName);
+//        OutputStream outStream = new FileOutputStream(htmlFile);
 
         //也可以使用字符数组流获取解析的内容
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        OutputStream outStream = new BufferedOutputStream(baos);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        OutputStream outStream = new BufferedOutputStream(baos);
 
         DOMSource domSource = new DOMSource(htmlDocument);
         StreamResult streamResult = new StreamResult(outStream);
@@ -128,9 +140,35 @@ public class WordToHtml {
         serializer.transform(domSource, streamResult);
 
         //也可以使用字符数组流获取解析的内容
-//        String content = baos.toString();
+        String content = baos.toString();
 //        System.out.println(content);
-//        baos.close();
+        baos.close();
         outStream.close();
+        deleteFile(filepath);//删除文件
+        return content;
+    }
+
+    /**
+     * 删除单个文件
+     *
+     * @param fileName
+     *            要删除的文件的文件名
+     * @return 单个文件删除成功返回true，否则返回false
+     */
+    public static boolean deleteFile(String fileName) {
+        File file = new File(fileName);
+        // 如果文件路径所对应的文件存在，并且是一个文件，则直接删除
+        if (file.exists() && file.isFile()) {
+            if (file.delete()) {
+                System.out.println("删除单个文件" + fileName + "成功！");
+                return true;
+            } else {
+                System.out.println("删除单个文件" + fileName + "失败！");
+                return false;
+            }
+        } else {
+            System.out.println("删除单个文件失败：" + fileName + "不存在！");
+            return false;
+        }
     }
 }
