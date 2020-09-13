@@ -7,8 +7,8 @@ import com.ruoyi.code.mapper.SampleMapper;
 import com.ruoyi.code.mapper.TestrecordMapper;
 import com.ruoyi.code.mapper.TrustMapper;
 import com.ruoyi.code.service.IAppraisalfileService;
+import com.ruoyi.code.utils.GreateJdws;
 import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.common.utils.file.GreatJdws;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -152,6 +152,6 @@ public class AppraisalfileServiceImpl implements IAppraisalfileService
 
         Map map = JSON.parseObject(JSON.toJSONString(appraisalfileContent), Map.class);
 
-        return GreatJdws.readwriteWord(map);
+        return GreateJdws.readwriteWord(map);
     }
 }

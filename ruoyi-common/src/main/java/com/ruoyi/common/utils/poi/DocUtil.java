@@ -1,12 +1,11 @@
 package com.ruoyi.common.utils.poi;
 
 import org.apache.poi.POIXMLDocument;
+import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.hwpf.usermodel.Range;
 import org.apache.poi.xwpf.usermodel.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -122,6 +121,50 @@ public class DocUtil {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * 实现对word读取和修改操作
+     *
+     * @param
+     * @param map 待填充的数据，从数据库读取
+     */
+    public static void searchAndReplaceDoc(String srcPath, String destPath, Map<String, String> map) {
+        FileInputStream in = null;
+        try {
+            in = new FileInputStream(new File(srcPath));
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        }
+        HWPFDocument hdt = null;
+        try {
+            hdt = new HWPFDocument(in);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        //读取word文本内容
+        Range range = hdt.getRange();
+        // 替换文本内容  ````````````
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            range.replaceText(entry.getKey(), entry.getValue());
+        }
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(destPath, true);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            hdt.write(out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // 输出字节流
+        try {
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
