@@ -1,28 +1,30 @@
 package com.ruoyi.code.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.code.domain.DnaData;
 import com.ruoyi.code.domain.Sample;
+import com.ruoyi.code.domain.TestrecordDetail;
 import com.ruoyi.code.service.ISampleService;
+import com.ruoyi.code.service.ITestrecordDetailService;
+import com.ruoyi.code.utils.CreatDnaList;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.config.Global;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.file.FileUploadUtils;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.code.domain.TestrecordDetail;
-import com.ruoyi.code.service.ITestrecordDetailService;
-import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 鉴定详情Controller
@@ -141,4 +143,40 @@ public class TestrecordDetailController extends BaseController
         return prefix + "/edit";
     }
 
+
+    /**
+     * 新增文件信息
+     */
+    @PostMapping("/datUpload")
+    @ResponseBody
+    public int addSave(MultipartFile file, String sampleId) throws IOException
+    {
+        // 上传文件路径
+        String filePath = Global.getUploadPath();
+        // 上传并返回新文件名称
+        String filePath_name = FileUploadUtils.upload(filePath, file);
+        String path = (filePath+filePath_name).replace("upload/profile/","");
+        List<DnaData> DnaDataList = CreatDnaList.getDnaDataList(path,sampleId);
+        return testrecordDetailService.insertDnaDataList(DnaDataList);
+    }
+
+
+    /**
+     * 查询DNA列表
+     */
+    @PostMapping("/selectDnaDataList/{sample_id}")
+    @ResponseBody
+    public TableDataInfo selectDnaDataList(@PathVariable("sample_id") String sample_id)
+    {
+        List<DnaData> list = testrecordDetailService.selectDnaDataList(sample_id);
+        return getDataTable(list);
+    }
+
+    @GetMapping("/dnaDataList/{sample_id}")
+    public String dnaDataList(@PathVariable("sample_id") String sample_id,ModelMap mmap)
+    {
+        mmap.put("sample_id",sample_id);
+
+        return prefix + "/dnaDataList";
+    }
 }

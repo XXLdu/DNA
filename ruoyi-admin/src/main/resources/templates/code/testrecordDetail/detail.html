@@ -37,7 +37,7 @@
                                 <div class="form-group">
                                     <div class="col-sm-12">
                                         <select name="sample" class="form-control m-b" th:with="type=${sampleList}">
-                                            <option>请选择检材</option>
+                                            <option value="">请选择检材</option>
                                             <option th:each="sample:${type}" th:text="${sample.name}" th:value="${sample.id}"></option>
                                         </select>
                                     </div>
@@ -102,9 +102,9 @@
                                 </div>
                             </td>
                             <td>
-                                <input type="button" name="look">
-                                <input type="file" name="dat">
-                                <input type="submit">
+                                <input type="file" name="file">
+                                <button type="button" name="submit" onclick="datUpLoad(this)"> 上 传 </button>
+                                <button type="button" name="look" style="display: none" onclick="lookDnaDataList(this)"> 查 看 </button>
                             </td>
                         </tr>
                         <tr id="sign"></tr>
@@ -140,6 +140,7 @@
             $.each(tr.find("select"),function(){
                 $(this).val("");
             });
+            tr.find("[name='look']").css('display','none');
             $("#sign").before(tr);
 
             bindDatetimepicker();
@@ -154,7 +155,7 @@
                 var object ={
                     trustId:[[${trust_id}]],
                     sampleId:$(this).find("[name='sample']").val()+"",
-                    sampleName:$(this).find("[name='sample']").text()+"",
+                    sampleName:$(this).find("[name='sample'] option:selected").text()+"",
                     purifyWay:$(this).find("[name='purifyWay']").val()+"",
                     purifyReagent:$(this).find("[name='purifyReagent']").val()+"",
                     purifyInstrument:$(this).find("[name='purifyInstrument']").val()+"",
@@ -251,11 +252,55 @@
                                 $(this).attr("selected",true);
                         });
                         tr.find("[name='amplificationStartTime']").val(ry_format(detail.amplificationStartTime));
-                        tr.find("[name='amplificationEndTime']").val(ry_format(detail.amplificationEndTime,));
+                        tr.find("[name='amplificationEndTime']").val(ry_format(detail.amplificationEndTime));
+                        if(detail.dna > 0){
+                            tr.find("[name='look']").css('display','block');
+                        }
                     }
                     bindSelectpicker();
                 }
             })
+        }
+
+        function datUpLoad(obj){
+            var tr = $(obj).parents("tr");
+            var file = tr.find("[name='file']").prop('files')[0];
+            var sampleId = tr.find("[name='sample']").val();
+            if(file == "undefind"){
+                alert("请选择文件");
+                return false;
+            }
+            if(sampleId == ""){
+                alert("请选择检材");
+                return false;
+            }
+            var formData = new FormData();
+            formData.append("file", file);
+            formData.append("sampleId", sampleId);
+            $.ajax({
+                url: ctx + "code/testrecordDetail/datUpload",
+                type:"POST",
+                data:formData,
+                processData : false,
+                contentType : false,
+                dataType : 'json',
+                async : false,
+                success: function(r) {
+                    if(r>0){
+                        tr.find("[name='look']").css('display','block');
+                        $.modal.msgSuccess("保存成功")
+                    }else{
+                        $.modal.msgError("发生错误，保存失败");
+                    }
+                }
+            })
+
+        }
+
+        function lookDnaDataList(obj) {
+            var sampleId = $(obj).parents("tr").find("[name='sample']").val();
+            var url = ctx + "code/testrecordDetail/dnaDataList/"+sampleId;
+            $.modal.open("DNA",url);
         }
     </script>
 </body>

@@ -1,5 +1,6 @@
 package com.ruoyi.common.utils.poi;
 
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.poi.POIXMLDocument;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.Range;
@@ -147,6 +148,9 @@ public class DocUtil {
         Range range = hdt.getRange();
         // 替换文本内容  ````````````
         for (Map.Entry<String, String> entry : map.entrySet()) {
+            System.out.println("++++++++++key:"+entry.getKey()+"+++++++++");
+            if(StringUtils.isNull(entry.getValue())) continue;
+            if("table".equals(entry.getKey())) continue;
             range.replaceText(entry.getKey(), entry.getValue());
         }
         FileOutputStream out = null;

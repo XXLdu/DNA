@@ -29,8 +29,9 @@ public class CreatDnaList {
         } else {
             String name = subFile.getName();
             if (name.endsWith(from)) {
-                subFile.renameTo(new File(subFile.getParent() + "/" + name.substring(0, name.indexOf(from)) + to));
-                return subFile;
+                File toFile = new File(subFile.getParent() + "/" + name.substring(0, name.indexOf(from)) + to);
+                subFile.renameTo(toFile);
+                return toFile;
             }else{
                 return null;
             }

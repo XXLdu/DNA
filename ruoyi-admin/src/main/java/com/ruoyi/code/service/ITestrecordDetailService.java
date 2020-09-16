@@ -1,7 +1,9 @@
 package com.ruoyi.code.service;
 
-import java.util.List;
+import com.ruoyi.code.domain.DnaData;
 import com.ruoyi.code.domain.TestrecordDetail;
+
+import java.util.List;
 
 /**
  * 鉴定详情Service接口
@@ -40,4 +42,16 @@ public interface ITestrecordDetailService
      * 保存鉴定详情(多条)
      */
     public int doSaveTestrecordDetail(List<TestrecordDetail> list);
+
+
+    /**
+     * 保存dna数据(多条)
+     */
+    public int insertDnaDataList(List<DnaData> list);
+
+    /**
+     * 查询DNA列表
+     */
+    public List<DnaData> selectDnaDataList(String sample_id);
+
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('DNA图谱信息（DNA）列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="code:dna:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('code:dna:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('code:dna:remove')}]];
+        var url = ctx + "code/testrecordDetail/selectDnaDataList/"+[[${sample_id}]];
+
+        $(function() {
+            var options = {
+                url: url,
+                modalName: "检验图谱",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'code', 
+                    title: '基因序列'
+                },
+                {
+                    field: 'value',
+                    title: '基因编号'
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

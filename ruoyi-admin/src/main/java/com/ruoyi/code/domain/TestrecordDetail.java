@@ -58,6 +58,8 @@ public class TestrecordDetail extends BaseEntity
     /** 排序编号 */
     private String orderNum;
 
+    private String dna;
+
     public String getTrustId() {
         return trustId;
     }
@@ -181,6 +183,14 @@ public class TestrecordDetail extends BaseEntity
 
     public void setOrderNum(String orderNum) {
         this.orderNum = orderNum;
+    }
+
+    public String getDna() {
+        return dna;
+    }
+
+    public void setDna(String dna) {
+        this.dna = dna;
     }
 
     @Override

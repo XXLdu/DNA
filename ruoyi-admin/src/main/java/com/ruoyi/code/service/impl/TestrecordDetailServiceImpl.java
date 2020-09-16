@@ -1,5 +1,6 @@
 package com.ruoyi.code.service.impl;
 
+import com.ruoyi.code.domain.DnaData;
 import com.ruoyi.code.domain.TestrecordDetail;
 import com.ruoyi.code.mapper.TestrecordDetailMapper;
 import com.ruoyi.code.service.ITestrecordDetailService;
@@ -82,4 +83,28 @@ public class TestrecordDetailServiceImpl implements ITestrecordDetailService
             throw new RuntimeException();
         }
     };
+
+
+    public int insertDnaDataList(List<DnaData> list){
+        try{
+            int i = testrecordDetailMapper.deleteDnaDataList(list.get(0).getSample_id());
+            if(i>-1){
+                return testrecordDetailMapper.insertDnaDataList(list);
+            }else{
+                return -1;
+            }
+        }catch (Exception e )
+        {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    /**
+     * 查询DNA列表
+     */
+    public List<DnaData> selectDnaDataList(String sample_id){
+        return testrecordDetailMapper.selectDnaDataList(sample_id);
+    };
+
 }

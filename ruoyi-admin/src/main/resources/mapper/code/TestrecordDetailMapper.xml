@@ -19,10 +19,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="amplificationStartTime"    column="AMPLIFICATION_START_TIME"    />
         <result property="amplificationEndTime"    column="AMPLIFICATION_END_TIME"    />
         <result property="orderNum"    column="ORDER_NUM"    />
+        <result property="dna"    column="DNA"    />
     </resultMap>
 
     <sql id="selectTestrecordDetailVo">
-        select TRUST_ID, SAMPLE_ID, SAMPLE_NAME, PURIFY_WAY, PURIFY_REAGENT, PURIFY_INSTRUMENT, PURIFY_START_TIME, PURIFY_END_TIME, AMPLIFICATION_WAY, AMPLIFICATION_REAGENT, AMPLIFICATION_INSTRUMENT, AMPLIFICATION_START_TIME, AMPLIFICATION_END_TIME, ORDER_NUM from testrecord_detail
+        select TRUST_ID, SAMPLE_ID, SAMPLE_NAME, PURIFY_WAY, PURIFY_REAGENT, PURIFY_INSTRUMENT, PURIFY_START_TIME, PURIFY_END_TIME, AMPLIFICATION_WAY, AMPLIFICATION_REAGENT, AMPLIFICATION_INSTRUMENT, AMPLIFICATION_START_TIME, AMPLIFICATION_END_TIME, ORDER_NUM, (select count(1) from dna_data k where k.sample_id = t.sample_id) as DNA from testrecord_detail t
     </sql>
 
     <select id="selectTestrecordDetailList" parameterType="TestrecordDetail" resultMap="TestrecordDetailResult">
@@ -57,6 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="trustId != null  and trustId != ''">#{trustId},</if>
             <if test="sampleId != null  and sampleId != ''">#{sampleId},</if>
+            <if test="sampleName != null  and sampleName != ''">#{sampleName},</if>
             <if test="purifyWay != null  and purifyWay != ''">#{purifyWay},</if>
             <if test="purifyReagent != null  and purifyReagent != ''">#{purifyReagent},</if>
             <if test="purifyInstrument != null  and purifyInstrument != ''">#{purifyInstrument},</if>
@@ -74,5 +76,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <delete id="deleteTestrecordDetailByTrustId" parameterType="String">
         delete from testrecord_detail where TRUST_ID = #{trustId}
     </delete>
+
+    <resultMap type="DnaData" id="DnaDataResult">
+        <result property="id"    column="ID"    />
+        <result property="sample_id"    column="SAMPLE_ID"    />
+        <result property="code"    column="CODE"    />
+        <result property="value"    column="VALUE"    />
+        <result property="sort"    column="SORT"    />
+    </resultMap>
+
+    <insert id="insertDnaDataList" useGeneratedKeys="true" keyProperty="id" parameterType="DnaData">
+        insert into dna_data
+        (id, sample_id, code, value, sort)
+        values
+        <foreach collection="list" item="dnaData" index="index" separator=",">
+            (
+            #{dnaData.id,jdbcType=CHAR},
+            #{dnaData.sample_id,jdbcType=CHAR},
+            #{dnaData.code,jdbcType=VARCHAR},
+            #{dnaData.value,jdbcType=VARCHAR},
+            #{dnaData.sort,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteDnaDataList" parameterType="String">
+        delete from dna_data where SAMPLE_ID = #{sample_id}
+    </delete>
+
+    <select id="selectDnaDataList" parameterType="String" resultMap="DnaDataResult">
+        SELECT CODE,SORT,GROUP_CONCAT(VALUE)AS value FROM dna_data
+        where SAMPLE_ID = #{sample_id}
+        GROUP BY CODE,SORT
+        ORDER BY SORT
+    </select>
 
 </mapper>

@@ -10,14 +10,14 @@ import java.util.Map;
 
 public class GreateJdws {
 
-    private static String TemplateFile = "DNAmuban.doc";
+    private static String TemplateFile = "鉴定文书.doc";
     private static String courseFile = "";//当前文件路径
 
     //获取当前文件路径
     static void getCourseFile(){
         File directory = new File("");//参数为空
         try {
-            courseFile = directory.getCanonicalPath()+"\\ruoyi-admin\\src\\main\\java\\com\\ruoyi\\code\\utils\\";
+            courseFile = directory.getCanonicalPath()+"\\ruoyi-admin\\src\\main\\resources\\static\\file\\";
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,7 +1,9 @@
 package com.ruoyi.code.mapper;
 
-import java.util.List;
+import com.ruoyi.code.domain.DnaData;
 import com.ruoyi.code.domain.TestrecordDetail;
+
+import java.util.List;
 
 /**
  * 鉴定详情Mapper接口
@@ -43,4 +45,14 @@ public interface TestrecordDetailMapper
      * @return 结果
      */
     public int deleteTestrecordDetailByTrustId(String trustId);
+
+    /**
+     * 新增DNAList
+     * @return 结果
+     */
+    public int insertDnaDataList(List<DnaData> list);
+
+    public int deleteDnaDataList(String sample_id);
+
+    public List<DnaData> selectDnaDataList(String sample_id);
 }

@@ -22,7 +22,7 @@ public class MimeTypeUtils
     public static final String[] FLASH_EXTENSION = { "swf", "flv" };
 
     public static final String[] MEDIA_EXTENSION = { "swf", "flv", "mp3", "wav", "wma", "wmv", "mid", "avi", "mpg",
-            "asf", "rm", "rmvb" };
+            "asf", "rm", "rmvb", "dat" };
 
     public static final String[] DEFAULT_ALLOWED_EXTENSION = {
             // 图片
@@ -32,7 +32,7 @@ public class MimeTypeUtils
             // 压缩文件
             "rar", "zip", "gz", "bz2",
             // pdf
-            "pdf" };
+            "pdf","dat" };
 
     public static String getExtension(String prefix)
     {
